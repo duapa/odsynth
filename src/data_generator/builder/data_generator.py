@@ -1,11 +1,11 @@
 from __future__ import annotations
 from ..core import Composite, Plural, Component
 from ..primitives.providers.simple_text import Text
-from ..primitives.factory import build_primitives_factory
+from ..primitives import factory
 from typing import Dict, Any, Tuple, Optional
 from random import SystemRandom
 
-primitives_factory = build_primitives_factory()
+factory.build_primitives_factory()
 
 PROVIDER_KEY = "provider"
 PROVIDER_ARGS_KEY = "provider_args"
@@ -35,7 +35,7 @@ def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
     elif PROVIDER_KEY in schema:
         provider_name = schema[PROVIDER_KEY]
         args = schema[PROVIDER_ARGS_KEY] if PROVIDER_ARGS_KEY in schema else {}
-        provider = primitives_factory.get_provider(provider_name, args)
+        provider = factory.get_provider(provider_name, args)
         provider.field_name = field_name
         return provider
     elif SUB_FIELDS_KEY in schema and field_name.startswith("plural_"):
