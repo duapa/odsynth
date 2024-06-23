@@ -57,8 +57,11 @@ This produces an output like
 
 ```
 
+# Extensibility
+Adding user-defined `Providers` is possible by adding an extension python file to the [provider plugins folder](/src/data_generator/provider_plugins/). [An example for creating random integers is available here](/src/data_generator/provider_plugins/random_int.py)
+
 # Next Steps
-* Implement `plugins` architecture for extending the solution by adding more generators for Primitives
+* Implement system for loading plugins from an absolute path
 * Build CLI for generating data
 * Build renderers for Spark Pandas etc
 * Build Data -> S3 utility
