@@ -23,14 +23,14 @@ This example relies on the schema at [./sample_schema/schema.yaml](./sample_sche
 
 ```json
 {
-    'firstname': 'Bruce',
-    'lastname': 'Henderson', 
-    'children': [
-        {'firstname': 'George', 'lastname': 'Clayton'}, 
-        {'firstname': 'Brianna', 'lastname': 'Mosley'},
+    "firstname": "Bruce",
+    "lastname": "Henderson", 
+    "children": [
+        {"firstname": "George", "lastname": "Clayton"}, 
+        {"firstname": "Brianna", "lastname": "Mosley"},
     ], 
-    'age': 37,
-    'ssn': '604-35-3570'
+    "age": 37,
+    "ssn": "604-35-3570"
 }
 ```
 **Note:** The specification of the schema and user plugin folders is not restricted to relative paths.
