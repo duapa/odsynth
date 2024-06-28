@@ -2,12 +2,13 @@ firstname:
   provider: first_name
 lastname:
   provider: last_name
-child:
+plural_children:
   fields:
     firstname:
       provider: first_name
     lastname:
       provider: last_name
+  max_count: 20
 age:
   provider: random_int
   provider_args:
