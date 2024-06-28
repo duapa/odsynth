@@ -1,0 +1,12 @@
+[package]
+name = "open-data-synthesizer"
+version = "0.1.0"
+description = "An open data synthesizer"
+url = "https://github.com/kbaafi/data-synthesizer"
+
+[author]
+name = "Kofi Baafi"
+email = "kbaafi@gmail.com"
+
+[install_dependencies]
+deps = ["toml", "faker"]
