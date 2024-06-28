@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from utils import load_toml
+from setup_utils import load_toml
 
 config = load_toml("../setup-config.toml")
 
