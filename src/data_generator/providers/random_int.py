@@ -1,5 +1,6 @@
-from ..core import Primitive
 from faker import Faker
+
+from ..core import Primitive
 
 faker = Faker()
 
@@ -14,7 +15,7 @@ class RandomInt(Primitive):
     @property
     def field_name(self):
         return self._field_name
-    
+
     @field_name.setter
     def field_name(self, value):
         self._field_name = value
@@ -29,19 +30,25 @@ class RandomInt(Primitive):
             try:
                 _max = int(_max)
             except ValueError as ve:
-                raise ValueError(f"An error occurred while trying to validate kwargs for provider {__class__.get_provider_name()}: {str(ve)}")
+                raise ValueError(
+                    f"An error occurred while trying to validate kwargs for provider {__class__.get_provider_name()}: {str(ve)}"
+                )
         if MIN_KEY in self._kwargs:
             _min = self._kwargs[MIN_KEY]
             try:
                 _min = int(_min)
             except ValueError as ve:
-                raise ValueError(f"An error occurred while trying to validate kwargs for provider {__class__.get_provider_name()}: {str(ve)}")
+                raise ValueError(
+                    f"An error occurred while trying to validate kwargs for provider {__class__.get_provider_name()}: {str(ve)}"
+                )
         if _max is None:
             _max = DEFAULT_MAX_VALUE
         if _min is None:
             _min = DEFAULT_MIN_VALUE
         if _max < _min:
-            raise ValueError(f"Min value {_min} cannot be greater than Max value {_max} in provider '{__class__.get_provider_name()}'")
+            raise ValueError(
+                f"Min value {_min} cannot be greater than Max value {_max} in provider '{__class__.get_provider_name()}'"
+            )
         self._max = _max
         self._min = _min
 

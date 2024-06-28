@@ -1,26 +1,25 @@
-from data_generator.synth import generate_data
+import typer
+from typing_extensions import Annotated
 
-def main():
-    data_schema = {
-        "firstname": {"provider": "first_name"},
-        "lastname": {"provider": "last_name"},
-        "plural_children": {
-            "fields": {
-                "firstname": {"provider": "first_name"},
-                "lastname": {"provider": "last_name"}
-            },
-            "max_count":20
-        },
-        "age": {
-            "provider": "random_int",
-            "provider_args": {
-                "min": "25",
-                "max": "55"
-            }     
-        }
-    }
-    generated_data = generate_data(schema=data_schema)
+from data_generator.synth import generate_data
+from utils import load_yaml
+
+app = typer.Typer()
+
+
+@app.command()
+def main(
+    schema_def_file: Annotated[
+        str, typer.Argument(help="Location of schema definition for data generation")
+    ],
+    plugins_dir: Annotated[
+        str, typer.Argument(help="Location for user added data generation providers.")
+    ] = None,
+):
+    data_schema = load_yaml(schema_def_file)
+    generated_data = generate_data(schema=data_schema, plugins_dir=plugins_dir)
     print(generated_data)
 
+
 if __name__ == "__main__":
-    main()
+    app()

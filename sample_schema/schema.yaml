@@ -1,0 +1,18 @@
+firstname:
+  provider: first_name
+lastname:
+  provider: last_name
+plural_children:
+  fields:
+    firstname:
+      provider: first_name
+    lastname:
+      provider: last_name
+  max_count: 20
+age:
+  provider: random_int
+  provider_args:
+    min: 25
+    max: 55
+ssn:
+  provider: com.github.kbaafi.us_ssn

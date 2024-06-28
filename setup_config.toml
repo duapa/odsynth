@@ -9,4 +9,4 @@ name = "Kofi Baafi"
 email = "kbaafi@gmail.com"
 
 [install_dependencies]
-deps = ["toml", "faker"]
+deps = ["toml", "faker", "typer"]

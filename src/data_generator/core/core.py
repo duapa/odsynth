@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import List
 from random import randint
+from typing import List
+
 
 class Component(ABC):
     @property
@@ -21,11 +22,10 @@ class Composite(Component):
     @property
     def field_name(self):
         return self._field_name
-    
+
     @field_name.setter
     def field_name(self, value: str):
         self._field_name = value
-
 
     def add(self, component: Component):
         self._children.append(component)
@@ -38,23 +38,22 @@ class Composite(Component):
             data = component.generate_data()
             child_data.update({field_name: data})
         return child_data
-    
 
 
 class Plural(Component):
-    def __init__(self, field_name: str, max_count:int=0):
+    def __init__(self, field_name: str, max_count: int = 0):
         self._children: List[Component] = []
         self._field_name = field_name
 
         if max_count == 0:
-            self._max_count = randint(1,10)
+            self._max_count = randint(1, 10)
         else:
             self._max_count = randint(1, max_count)
 
     @property
     def field_name(self):
         return self._field_name
-    
+
     @field_name.setter
     def field_name(self, value: str):
         self._field_name = value
@@ -62,7 +61,7 @@ class Plural(Component):
     def add(self, component: Component):
         self._children.append(component)
         return self
-    
+
     def generate_data(self):
         composite = []
 
@@ -85,7 +84,7 @@ class Primitive(Component):
     @property
     def field_name(self):
         return self._field_name
-    
+
     @field_name.setter
     def field_name(self, value: str):
         self._field_name = value
@@ -93,11 +92,12 @@ class Primitive(Component):
     @property
     def provider_kwargs(self):
         return self._kwargs
-    
+
     @provider_kwargs.setter
-    def provider_kwargs(self, value:dict):
+    def provider_kwargs(self, value: dict):
         self._kwargs = value
-    
 
     def generate_data(self):
-        raise NotImplementedError("Data generation of a primitive must be implemented in subclass")
+        raise NotImplementedError(
+            "Data generation of a primitive must be implemented in subclass"
+        )

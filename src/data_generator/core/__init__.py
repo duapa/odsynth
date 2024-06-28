@@ -1,3 +1,3 @@
-from .core import Component, Composite, Primitive, Plural
+from .core import Component, Composite, Plural, Primitive
 
-__all__ = ['Component', 'Composite', 'Primitive', 'Plural']
+__all__ = ["Component", "Composite", "Primitive", "Plural"]

@@ -8,62 +8,41 @@ The following providers, some based on `faker's` data generators have been imple
 * [first_name](./src/data_generator/primitives/providers/simple_text.py)
 * [last_name](./src/data_generator/primitives/providers/simple_text.py)
 
-The possibility of extending this solution will be added by implementing a plugins architecture which should contain 'user-added' data generators. Users can then specify these providers in their schemas
+It is possible for developers to implement their own _data providers_ for their own custom cases. Users can then specify these providers in their schemas.
 
 ## Dependencies
 * See [requirements.txt](./requirements.txt)
 
 ## Usage
-Current iteration produces one data item for a fictitous scenario where an adult is responsible for a number of children
+Users can specify a plugins directory where additional Primitive data generators are stored. Run `main.py --help` for instructions.
 
-```sh
-cd src
+### Example
+`python src/main.py ./sample_schema/schema.yaml ./sample_user_plugins/`
 
-python main.py
-
-```
-
-The example schema from this example is shown below:
-
-```python
-data_schema = {
-    "firstname": {"provider": "first_name"},
-    "lastname": {"provider": "last_name"},
-    "plural_children": {
-        "fields": {
-            "firstname": {"provider": "first_name"},
-            "lastname": {"provider": "last_name"}
-        },
-        "max_count":20
-    },
-    "age": {
-        "provider": "random_int",
-        "provider_args": {
-            "min": "25",
-            "max": "55"
-        }     
-    }
-}
-generated_data = generate_data(schema=data_schema)
-    
-print(generated_data)
-
-```
-
-This produces an output like
+This example relies on the schema at [./sample_schema/schema.yaml](./sample_schema/schema.yaml) which simulates the scenario of a parent having multiple children and produces an output similar what is shown below:
 
 ```json
-{'firstname': 'Bruce', 'lastname': 'Henderson', 'children': [{'firstname': 'George', 'lastname': 'Clayton'}, {'firstname': 'Brianna', 'lastname': 'Mosley'}, {'firstname': 'Jason', 'lastname': 'Armstrong'}, {'firstname': 'David', 'lastname': 'Mckee'}, {'firstname': 'Monica', 'lastname': 'Harper'}, {'firstname': 'Ann', 'lastname': 'Osborn'}, {'firstname': 'Ryan', 'lastname': 'Case'}, {'firstname': 'Joseph', 'lastname': 'Levine'}, {'firstname': 'Laura', 'lastname': 'Hernandez'}], 'age': 37}
-
+{
+    'firstname': 'Bruce',
+    'lastname': 'Henderson', 
+    'children': [
+        {'firstname': 'George', 'lastname': 'Clayton'}, 
+        {'firstname': 'Brianna', 'lastname': 'Mosley'},
+    ], 
+    'age': 37,
+    'ssn': '604-35-3570'
+}
 ```
+**Note:** The specification of the schema and user plugin folders is not restricted to relative paths.
 
 # Extensibility
-Adding user-defined `Providers` is possible by adding an extension python file to the [provider plugins folder](/src/data_generator/provider_plugins/). [An example for creating random integers is available here](/src/data_generator/provider_plugins/random_int.py)
+Extending the solution by adding user-defined providers is possible by creating your own plugins in a 'plugin folder' and specifying the plugin folder when calling the application. An example provider which uses `faker`'s `ssn` provider to generate fictitious American Social Security Numbers is available at [./sample_user_plugins](./sample_user_plugins/ssn.py)
 
 # Next Steps
-* Implement system for loading plugins from an absolute path
-* Build CLI for generating data
+* Extend CLI for generating data
+* Generalize user API for generating data
 * Build renderers for Spark Pandas etc
-* Build Data -> S3 utility
-* Build Data -> Kafka utility
+* Build Data Publishers
+    * Build Data -> S3 utility
+    * Build Data -> Kafka utility
 * Any other ideas

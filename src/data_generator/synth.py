@@ -1,9 +1,10 @@
 from __future__ import annotations
-from .core import Composite, Plural, Component
-from . import factory
-from typing import Dict, Any
 
-factory.build_primitives_factory()
+from typing import Any, Dict
+
+from . import factory
+from .core import Component, Composite, Plural
+from .plugins_loader import load_plugins
 
 PROVIDER_KEY = "provider"
 PROVIDER_ARGS_KEY = "provider_args"
@@ -18,17 +19,22 @@ def convert_max_str_int(max_str: str) -> int:
         return max_int
     except ValueError:
         return 0
-    
-def generate_data(schema: Dict[str, Any]) -> Dict[str, Any]:
+
+
+def generate_data(schema: Dict[str, Any], plugins_dir: str = None) -> Dict[str, Any]:
+    # Load providers
+    factory.build_primitives_factory(plugins_dir)
+
     data_object_model = generate_dom(DOM_ROOT_KEY, schema=schema)
     data = data_object_model.generate_data()
     return data
 
+
 def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
-    if field_name==DOM_ROOT_KEY:
+    if field_name == DOM_ROOT_KEY:
         root = Composite(DOM_ROOT_KEY)
         for k, v in schema.items():
-            root.add(generate_dom(k,v))
+            root.add(generate_dom(k, v))
         return root
     elif PROVIDER_KEY in schema:
         provider_name = schema[PROVIDER_KEY]
@@ -41,14 +47,13 @@ def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
             max_count = convert_max_str_int(schema[PLURAL_MAX_COUNT])
         else:
             max_count = 0
-        child_field_name = field_name.split('plural_')[1]
+        child_field_name = field_name.split("plural_")[1]
         root = Plural(field_name=child_field_name, max_count=max_count)
-        for k,v in schema[SUB_FIELDS_KEY].items():
-            root.add(generate_dom(k,v))
+        for k, v in schema[SUB_FIELDS_KEY].items():
+            root.add(generate_dom(k, v))
         return root
     elif SUB_FIELDS_KEY in schema:
         root = Composite(field_name)
         for k, v in schema[SUB_FIELDS_KEY].items():
             root.add(generate_dom(k, v))
         return root
- 
