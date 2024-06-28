@@ -1,6 +1,5 @@
 from ..core import Primitive
 from faker import Faker
-from ..primitives.factory import register_provider
 
 faker = Faker()
 
@@ -49,6 +48,3 @@ class RandomInt(Primitive):
     def generate_data(self):
         self.validate_kwargs()
         return faker.random_int(min=self._min, max=self._max)
-    
-def initialize():
-    register_provider(RandomInt.get_provider_name(), RandomInt())

@@ -1,4 +1,4 @@
-from ...core import Primitive
+from ..core import Primitive
 from faker import Faker
 
 faker = Faker()

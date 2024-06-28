@@ -1,9 +1,7 @@
 from __future__ import annotations
-from ..core import Composite, Plural, Component
-from ..primitives.providers.simple_text import Text
-from ..primitives import factory
-from typing import Dict, Any, Tuple, Optional
-from random import SystemRandom
+from .core import Composite, Plural, Component
+from . import factory
+from typing import Dict, Any
 
 factory.build_primitives_factory()
 

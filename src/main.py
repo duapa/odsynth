@@ -1,4 +1,4 @@
-from data_generator.builder import generate_data
+from data_generator.synth import generate_data
 
 def main():
     data_schema = {
