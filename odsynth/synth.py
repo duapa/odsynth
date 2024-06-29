@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from . import factory
 from .core import Component, Composite, Plural
 from .plugins_loader import load_plugins
+from .provider_factory import ProviderFactory
 from .utils import load_yaml
 
 PROVIDER_KEY = "provider"
@@ -25,12 +25,13 @@ def convert_max_str_int(max_str: str) -> int:
 def generate_data(schema_spec_file: str, plugins_dir: str = None) -> Dict[str, Any]:
     schema = load_yaml(schema_spec_file)
 
-    # Load providers
-    factory.create_provider_factory(plugins_dir)
+    ProviderFactory.load_providers(plugins_dir)
 
     data_object_model = generate_dom(DOM_ROOT_KEY, schema=schema)
-    data = data_object_model.generate_data()
-    return data
+    data_points = []
+    for _ in range(10):
+        data_points.append(data_object_model.generate_data())
+    return data_points
 
 
 def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
@@ -42,7 +43,7 @@ def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
     elif PROVIDER_KEY in schema:
         provider_name = schema[PROVIDER_KEY]
         args = schema[PROVIDER_ARGS_KEY] if PROVIDER_ARGS_KEY in schema else {}
-        provider = factory.get_provider(provider_name, args)
+        provider = ProviderFactory.get_provider(provider_name, args)
         provider.field_name = field_name
         return provider
     elif SUB_FIELDS_KEY in schema and field_name.startswith("plural_"):

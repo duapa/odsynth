@@ -1,7 +1,7 @@
 from faker import Faker
 
-import data_generator.factory as factory
-from data_generator.core import Provider
+from odsynth.core import Provider
+from odsynth.provider_factory import ProviderFactory
 
 
 class SSN(Provider):
@@ -15,4 +15,4 @@ class SSN(Provider):
 
 
 def initialize():
-    factory.register_provider(SSN.get_provider_name(), SSN())
+    ProviderFactory.register_provider(SSN.get_provider_name(), SSN())
