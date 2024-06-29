@@ -4,9 +4,9 @@ This project demonstrates produces a python application that can be configured t
 
 This project may be used for generating data for exploratory cases at the beginning of ETL applications, benchmarking, fun projects etc.
 The following providers, some based on `faker's` data generators have been implemented
-* [random_int](./src/data_generator/provider_plugins/random_int.py)
-* [first_name](./src/data_generator/primitives/providers/simple_text.py)
-* [last_name](./src/data_generator/primitives/providers/simple_text.py)
+* [random_int](./src/data_generator/providers/random_int.py)
+* [first_name](./src/data_generator/providers/simple_text.py)
+* [last_name](./src/data_generator/providers/simple_text.py)
 
 It is possible for developers to implement their own _data providers_ for their own custom cases. Users can then specify these providers in their schemas.
 
