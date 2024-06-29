@@ -15,3 +15,7 @@ age:
     max: 55
 ssn:
   provider: com.github.kbaafi.us_ssn
+about_me:
+  provider: text
+  provider_args:
+    max_nb_chars: 50
