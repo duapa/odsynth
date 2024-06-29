@@ -6,6 +6,7 @@ from .core import Component, Composite, Plural
 from .plugins_loader import load_plugins
 from .provider_factory import ProviderFactory
 from .utils import load_yaml
+from .transformers import BaseTransformer
 
 PROVIDER_KEY = "provider"
 PROVIDER_ARGS_KEY = "provider_args"
@@ -20,18 +21,6 @@ def convert_max_str_int(max_str: str) -> int:
         return max_int
     except ValueError:
         return 0
-
-
-def generate_data(schema_spec_file: str, plugins_dir: str = None) -> Dict[str, Any]:
-    schema = load_yaml(schema_spec_file)
-
-    ProviderFactory.load_providers(plugins_dir)
-
-    data_object_model = generate_dom(DOM_ROOT_KEY, schema=schema)
-    data_points = []
-    for _ in range(10):
-        data_points.append(data_object_model.generate_data())
-    return data_points
 
 
 def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
@@ -61,3 +50,28 @@ def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
         for k, v in schema[SUB_FIELDS_KEY].items():
             root.add(generate_dom(k, v))
         return root
+    
+
+class DataGenerator:
+    def __init__(
+            self,
+            schema: Dict[str, Any],
+            num_examples:int=10, 
+            plugins_dir:str=None,
+            transformer: BaseTransformer = None
+        ) -> None:
+        self._schema = schema
+        self._num_examples= num_examples
+        self._user_plugins_dir = plugins_dir
+        self._transformer = transformer
+
+    def generate_data(self):
+        ProviderFactory.load_providers(self._user_plugins_dir)
+
+        data_object_model = generate_dom(DOM_ROOT_KEY, schema=self._schema)
+        data_points = []
+        for _ in range(self._num_examples):
+            data_points.append(data_object_model.generate_data())
+        if self._transformer is None:
+            return data_points
+        return self._transformer.transform(data_points)
