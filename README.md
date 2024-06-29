@@ -1,23 +1,24 @@
 # Data Synthesizer
 
-This project demonstrates produces a python application that can be configured to generate "any" kind of fake data, given a schema. The solution relies on the [Composite Pattern](https://refactoring.guru/design-patterns/composite) to build an in-memory representation of the schema and consequently generate a python-dictionary example of the data specified by the schema.
+This project produces a python application that can be configured to generate "any" kind of fake data, given a schema. The solution relies on the [Composite Pattern](https://refactoring.guru/design-patterns/composite) to build an in-memory representation of the schema and consequently generate a python-dictionary example of the data specified by the schema.
 
 This project may be used for generating data for exploratory cases at the beginning of ETL applications, benchmarking, fun projects etc.
 The following providers, some based on `faker's` data generators have been implemented
-* [random_int](./src/data_generator/providers/random_int.py)
-* [first_name](./src/data_generator/providers/simple_text.py)
-* [last_name](./src/data_generator/providers/simple_text.py)
+* [random_int](./odsynth/providers/random_int.py)
+* [first_name](./odsynth/providers/simple_text.py)
+* [last_name](./odsynth/providers/simple_text.py)
+
 
 It is possible for developers to implement their own _data providers_ for their own custom cases. Users can then specify these providers in their schemas.
 
 ## Dependencies
-* See [requirements.txt](./requirements.txt)
+* See [setup_config.toml](./setup_config.toml)
 
 ## Usage
 Users can specify a plugins directory where additional Primitive data generators are stored. Run `main.py --help` for instructions.
 
 ### Example
-`python src/main.py --schema-spec=./sample_schema/schema.yaml --plugins-dir=./sample_user_plugins/`
+`python odsynth/entry_points/demo.py --schema-spec=./sample_schema/schema_plural.yaml --plugins-dir=./sample_user_plugins --num-samples=3`
 
 This example relies on the schema at [./sample_schema/schema.yaml](./sample_schema/schema.yaml) which simulates the scenario of a parent having multiple children and produces an output similar what is shown below:
 
@@ -35,13 +36,16 @@ This example relies on the schema at [./sample_schema/schema.yaml](./sample_sche
 ```
 **Note:** The specification of the schema and user plugin folders is not restricted to relative paths.
 
+## Data Transformers
+(Experimental) In the generation of the data, the user can specify a transformer which transforms the data which is inherently a list of dictionary objects to any other form specified by the user. Currently the following transformers are available:
+* [JsonTransformer](./odsynth/transformers/json_transformer.py)
+* [PandasDataframeTransformer](./odsynth/transformers/pandas_transformer.py)
+
 # Extensibility
 Extending the solution by adding user-defined providers is possible by creating your own plugins in a 'plugin folder' and specifying the plugin folder when calling the application. An example provider which uses `faker`'s `ssn` provider to generate fictitious American Social Security Numbers is available at [./sample_user_plugins](./sample_user_plugins/ssn.py)
 
 # Next Steps
-* Extend CLI for generating data
-* Generalize user API for generating data
-* Build renderers for Spark Pandas etc
+* Build Transformer for Spark
 * Build Data Publishers
     * Build Data -> S3 utility
     * Build Data -> Kafka utility
