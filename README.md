@@ -17,7 +17,7 @@ It is possible for developers to implement their own _data providers_ for their 
 Users can specify a plugins directory where additional Primitive data generators are stored. Run `main.py --help` for instructions.
 
 ### Example
-`python src/main.py ./sample_schema/schema.yaml ./sample_user_plugins/`
+`python src/main.py --schema-spec=./sample_schema/schema.yaml --plugins-dir=./sample_user_plugins/`
 
 This example relies on the schema at [./sample_schema/schema.yaml](./sample_schema/schema.yaml) which simulates the scenario of a parent having multiple children and produces an output similar what is shown below:
 
