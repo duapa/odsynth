@@ -76,7 +76,7 @@ class Plural(Component):
         return composite
 
 
-class Primitive(Component):
+class Provider(Component):
     def __init__(self, **kwargs):
         self._field_name = None
         self._kwargs = kwargs
@@ -99,5 +99,5 @@ class Primitive(Component):
 
     def generate_data(self):
         raise NotImplementedError(
-            "Data generation of a primitive must be implemented in subclass"
+            "Data generation of a provider must be implemented in subclass"
         )

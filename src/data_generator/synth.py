@@ -23,7 +23,7 @@ def convert_max_str_int(max_str: str) -> int:
 
 def generate_data(schema: Dict[str, Any], plugins_dir: str = None) -> Dict[str, Any]:
     # Load providers
-    factory.build_primitives_factory(plugins_dir)
+    factory.create_provider_factory(plugins_dir)
 
     data_object_model = generate_dom(DOM_ROOT_KEY, schema=schema)
     data = data_object_model.generate_data()

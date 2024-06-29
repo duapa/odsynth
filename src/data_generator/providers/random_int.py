@@ -1,6 +1,6 @@
 from faker import Faker
 
-from ..core import Primitive
+from ..core import Provider
 
 faker = Faker()
 
@@ -11,7 +11,7 @@ DEFAULT_MIN_VALUE = 0
 DEFAULT_MAX_VALUE = 999999
 
 
-class RandomInt(Primitive):
+class RandomInt(Provider):
     @property
     def field_name(self):
         return self._field_name
