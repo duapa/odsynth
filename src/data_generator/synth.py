@@ -5,6 +5,7 @@ from typing import Any, Dict
 from . import factory
 from .core import Component, Composite, Plural
 from .plugins_loader import load_plugins
+from .utils import load_yaml
 
 PROVIDER_KEY = "provider"
 PROVIDER_ARGS_KEY = "provider_args"
@@ -21,7 +22,9 @@ def convert_max_str_int(max_str: str) -> int:
         return 0
 
 
-def generate_data(schema: Dict[str, Any], plugins_dir: str = None) -> Dict[str, Any]:
+def generate_data(schema_spec_file: str, plugins_dir: str = None) -> Dict[str, Any]:
+    schema = load_yaml(schema_spec_file)
+
     # Load providers
     factory.create_provider_factory(plugins_dir)
 

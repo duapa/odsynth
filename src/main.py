@@ -2,7 +2,6 @@ import typer
 from typing_extensions import Annotated
 
 from data_generator.synth import generate_data
-from utils import load_yaml
 
 app = typer.Typer()
 
@@ -16,8 +15,7 @@ def main(
         str, typer.Option(help="Location for user added data generation providers.")
     ] = None,
 ):
-    data_schema = load_yaml(schema_spec)
-    generated_data = generate_data(schema=data_schema, plugins_dir=plugins_dir)
+    generated_data = generate_data(schema_spec_file=schema_spec, plugins_dir=plugins_dir)
     print(generated_data)
 
 
