@@ -1,6 +1,6 @@
 from faker import Faker
 
-from ..core import Primitive
+from ..core import Provider
 
 DEFAULT_TEXT_MAX_NB_CHARS = 20
 
@@ -15,7 +15,7 @@ def str_to_int(int_str: str) -> int:
         return 0
 
 
-class Text(Primitive):
+class Text(Provider):
     @classmethod
     def get_provider_name(cls) -> str:
         return "text"
@@ -34,7 +34,7 @@ class Text(Primitive):
         return faker.text(max_nb_chars=self._max_nb_chars)
 
 
-class FirstName(Primitive):
+class FirstName(Provider):
     @classmethod
     def get_provider_name(cls) -> str:
         return "first_name"
@@ -43,7 +43,7 @@ class FirstName(Primitive):
         return faker.first_name()
 
 
-class LastName(Primitive):
+class LastName(Provider):
     @classmethod
     def get_provider_name(cls) -> str:
         return "last_name"

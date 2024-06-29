@@ -1,10 +1,10 @@
 from faker import Faker
 
 import data_generator.factory as factory
-from data_generator.core import Primitive
+from data_generator.core import Provider
 
 
-class SSN(Primitive):
+class SSN(Provider):
     @classmethod
     def get_provider_name(cls):
         return "com.github.kbaafi.us_ssn"
