@@ -23,10 +23,11 @@ def main(
         schema=schema,
         plugins_dir=plugins_dir,
         num_examples=num_samples,
-        transformer=JsonTransformer(),
+        transformer=PandasDataframeTransformer(),
     )
     for data in generator.yield_data():
         print(data, "\n")
+    print(generator.get_data())
 
 
 if __name__ == "__main__":
