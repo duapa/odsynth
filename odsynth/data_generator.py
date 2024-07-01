@@ -64,10 +64,9 @@ class DataGenerator:
         self._num_examples= num_examples
         self._user_plugins_dir = plugins_dir
         self._transformer = transformer
-
-    def generate_data(self):
         ProviderFactory.load_providers(self._user_plugins_dir)
 
+    def get_data(self):
         data_object_model = generate_dom(DOM_ROOT_KEY, schema=self._schema)
         data_points = []
         for _ in range(self._num_examples):
@@ -75,3 +74,10 @@ class DataGenerator:
         if self._transformer is None:
             return data_points
         return self._transformer.transform(data_points)
+    
+    def yield_data(self):
+        data_object_model = generate_dom(DOM_ROOT_KEY, schema=self._schema)
+        for _ in range(self._num_examples):
+            yield data_object_model.generate_data()
+
+

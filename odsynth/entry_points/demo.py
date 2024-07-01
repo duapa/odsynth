@@ -28,8 +28,15 @@ def main(
         num_examples=num_samples,
         transformer=JsonTransformer()
     )
-    generated_data = generator.generate_data()
+    print("\nUsing get_data")
+    generated_data = generator.get_data()
     print(generated_data)
+    print("")
+
+    print("\nUsing yield_data")
+    for data in generator.yield_data():
+        print(data)
+        print("")
 
 
 if __name__ == "__main__":
