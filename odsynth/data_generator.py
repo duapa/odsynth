@@ -5,6 +5,7 @@ from typing import Any, Dict
 from .core import Component, Composite, Plural
 from .provider_factory import ProviderFactory
 from .transformers import BaseTransformer
+from .utils import load_yaml
 
 PROVIDER_KEY = "provider"
 PROVIDER_ARGS_KEY = "provider_args"
@@ -54,13 +55,13 @@ def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
 class DataGenerator:
     def __init__(
         self,
-        schema: Dict[str, Any],
+        schema_spec_file: str,
         num_examples: int = 10,
         batch_size: int = 5,
         plugins_dir: str = None,
         transformer: BaseTransformer = None,
     ) -> None:
-        self._schema = schema
+        self._schema_spec_file = schema_spec_file
         self._num_examples = num_examples
         self._batch_size = batch_size
         self._user_plugins_dir = plugins_dir
@@ -68,7 +69,8 @@ class DataGenerator:
         ProviderFactory.load_providers(self._user_plugins_dir)
 
     def get_data(self):
-        data_object_model = generate_dom(DOM_ROOT_KEY, schema=self._schema)
+        schema = load_yaml(self._schema_spec_file)
+        data_object_model = generate_dom(DOM_ROOT_KEY, schema)
         data_points = []
         for _ in range(self._num_examples):
             data_points.append(data_object_model.generate_data())
@@ -77,7 +79,8 @@ class DataGenerator:
         return self._transformer.transform(data_points)
 
     def yield_data(self):
-        data_object_model = generate_dom(DOM_ROOT_KEY, schema=self._schema)
+        schema = load_yaml(self._schema_spec_file)
+        data_object_model = generate_dom(DOM_ROOT_KEY, schema)
 
         num_batches, remainder = divmod(self._num_examples, self._batch_size)
         for _ in range(num_batches):
