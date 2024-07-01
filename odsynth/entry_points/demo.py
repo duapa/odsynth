@@ -10,24 +10,22 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    schema_spec: Annotated[
-        str, typer.Option(help="Location of schema definition for data generation")
-    ],
-    num_samples: Annotated[int, typer.Option(help="Number of samples to be generated")],
-    plugins_dir: Annotated[
-        str, typer.Option(help="Location for user added data generation providers.")
-    ] = None,
+    schema_spec_file: str = typer.Option(
+        help="Location of schema definition for data generation"
+    ),
+    num_samples: int = typer.Option(help="Number of samples to be generated"),
+    plugins_dir: str = typer.Option(
+        None, help="Location for user added data generation providers."
+    ),
 ):
-    schema = load_yaml(schema_spec)
     generator = DataGenerator(
-        schema=schema,
+        schema_spec_file=schema_spec_file,
         plugins_dir=plugins_dir,
         num_examples=num_samples,
         transformer=PandasDataframeTransformer(),
     )
     for data in generator.yield_data():
         print(data, "\n")
-    print(generator.get_data())
 
 
 if __name__ == "__main__":
