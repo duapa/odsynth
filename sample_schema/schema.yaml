@@ -1,6 +1,6 @@
-firstname:
+parent_firstname:
   provider: first_name
-lastname:
+parent_lastname:
   provider: last_name
 child:
   fields:
@@ -8,14 +8,14 @@ child:
       provider: first_name
     lastname:
       provider: last_name
-age:
+parent_age:
   provider: random_int
   provider_args:
     min: 25
     max: 55
-ssn:
+parent_ssn:
   provider: com.github.kbaafi.us_ssn
-about_me:
+parent_about:
   provider: text
   provider_args:
     max_nb_chars: 50

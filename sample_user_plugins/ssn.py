@@ -15,4 +15,4 @@ class SSN(Provider):
 
 
 def initialize():
-    ProviderFactory.register_provider(SSN.get_provider_name(), SSN())
+    ProviderFactory.register_provider(SSN)

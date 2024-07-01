@@ -1,6 +1,6 @@
-firstname:
+parent_firstname:
   provider: first_name
-lastname:
+parent_lastname:
   provider: last_name
 plural_children:
   fields:
@@ -9,10 +9,10 @@ plural_children:
     lastname:
       provider: last_name
   max_count: 20
-age:
+parent_age:
   provider: random_int
   provider_args:
     min: 25
     max: 55
-ssn:
+parent_ssn:
   provider: com.github.kbaafi.us_ssn

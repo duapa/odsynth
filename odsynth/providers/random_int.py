@@ -25,6 +25,8 @@ class RandomInt(Provider):
         return "random_int"
 
     def validate_kwargs(self):
+        _max = None
+        _min = None
         if MAX_KEY in self._kwargs:
             _max = self._kwargs[MAX_KEY]
             try:

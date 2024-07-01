@@ -3,9 +3,7 @@ from __future__ import annotations
 from typing import Any, Dict
 
 from .core import Component, Composite, Plural
-from .plugins_loader import load_plugins
 from .provider_factory import ProviderFactory
-from .utils import load_yaml
 from .transformers import BaseTransformer
 
 PROVIDER_KEY = "provider"
@@ -13,6 +11,7 @@ PROVIDER_ARGS_KEY = "provider_args"
 SUB_FIELDS_KEY = "fields"
 DOM_ROOT_KEY = "$__dom__root"
 PLURAL_MAX_COUNT = "max_count"
+PLURAL_MARKER = "plural_"
 
 
 def convert_max_str_int(max_str: str) -> int:
@@ -35,12 +34,12 @@ def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
         provider = ProviderFactory.get_provider(provider_name, args)
         provider.field_name = field_name
         return provider
-    elif SUB_FIELDS_KEY in schema and field_name.startswith("plural_"):
+    elif SUB_FIELDS_KEY in schema and field_name.startswith(PLURAL_MARKER):
         if PLURAL_MAX_COUNT in schema:
             max_count = convert_max_str_int(schema[PLURAL_MAX_COUNT])
         else:
             max_count = 0
-        child_field_name = field_name.split("plural_")[1]
+        child_field_name = field_name.split(PLURAL_MARKER)[1]
         root = Plural(field_name=child_field_name, max_count=max_count)
         for k, v in schema[SUB_FIELDS_KEY].items():
             root.add(generate_dom(k, v))
@@ -50,18 +49,20 @@ def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
         for k, v in schema[SUB_FIELDS_KEY].items():
             root.add(generate_dom(k, v))
         return root
-    
+
 
 class DataGenerator:
     def __init__(
-            self,
-            schema: Dict[str, Any],
-            num_examples:int=10, 
-            plugins_dir:str=None,
-            transformer: BaseTransformer = None
-        ) -> None:
+        self,
+        schema: Dict[str, Any],
+        num_examples: int = 10,
+        batch_size: int = 5,
+        plugins_dir: str = None,
+        transformer: BaseTransformer = None,
+    ) -> None:
         self._schema = schema
-        self._num_examples= num_examples
+        self._num_examples = num_examples
+        self._batch_size = batch_size
         self._user_plugins_dir = plugins_dir
         self._transformer = transformer
         ProviderFactory.load_providers(self._user_plugins_dir)
@@ -74,10 +75,17 @@ class DataGenerator:
         if self._transformer is None:
             return data_points
         return self._transformer.transform(data_points)
-    
+
     def yield_data(self):
         data_object_model = generate_dom(DOM_ROOT_KEY, schema=self._schema)
-        for _ in range(self._num_examples):
-            yield data_object_model.generate_data()
 
-
+        num_batches, remainder = divmod(self._num_examples, self._batch_size)
+        for _ in range(num_batches):
+            data_points = []
+            for _ in range(self._batch_size):
+                data_points.append(data_object_model.generate_data())
+            yield data_points
+        data_points = []
+        for _ in range(remainder):
+            data_points.append(data_object_model.generate_data())
+        yield data_points
