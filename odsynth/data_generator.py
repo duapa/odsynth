@@ -45,7 +45,6 @@ def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
             root.add(generate_dom(k, v))
         return root
     elif SUB_FIELDS_KEY in schema:
-        print(schema, field_name)
         root = Composite(field_name)
         for k, v in schema[SUB_FIELDS_KEY].items():
             root.add(generate_dom(k, v))
@@ -80,13 +79,13 @@ class DataGenerator:
     def yield_data(self):
         data_object_model = generate_dom(DOM_ROOT_KEY, schema=self._schema)
 
-        num_batches,remainder = divmod(self._num_examples, self._batch_size)
+        num_batches, remainder = divmod(self._num_examples, self._batch_size)
         for _ in range(num_batches):
-            data_points=[]
+            data_points = []
             for _ in range(self._batch_size):
                 data_points.append(data_object_model.generate_data())
             yield data_points
-        data_points=[]
+        data_points = []
         for _ in range(remainder):
             data_points.append(data_object_model.generate_data())
         yield data_points

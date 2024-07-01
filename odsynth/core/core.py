@@ -72,7 +72,6 @@ class Plural(Component):
                 data = component.generate_data()
                 child_data.update({field_name: data})
             composite.append(child_data)
-
         return composite
 
 
