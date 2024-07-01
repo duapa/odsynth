@@ -85,7 +85,8 @@ class DataGenerator:
             for _ in range(self._batch_size):
                 data_points.append(data_object_model.generate_data())
             yield data_points
-        data_points = []
-        for _ in range(remainder):
-            data_points.append(data_object_model.generate_data())
-        yield data_points
+        if remainder > 0:
+            data_points = []
+            for _ in range(remainder):
+                data_points.append(data_object_model.generate_data())
+            yield data_points
