@@ -11,7 +11,7 @@ class Component(ABC):
 
     def generate_data(self):
         """Returns a dictionary representation of the generated data"""
-        raise NotImplementedError("to_dict must be implemented in subclasses")
+        raise NotImplementedError("generate_data must be implemented in subclasses")
 
 
 class Composite(Component):
@@ -57,10 +57,10 @@ class Plural(Component):
     def add(self, component: Component):
         self._children.append(component)
         return self
-    
+
     def __num_examples_to_generate(self):
         if self._max_count == 0:
-            return randint(1,10)
+            return randint(1, 10)
         return randint(1, self._max_count)
 
     def generate_data(self):
