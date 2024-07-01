@@ -44,11 +44,7 @@ class Plural(Component):
     def __init__(self, field_name: str, max_count: int = 0):
         self._children: List[Component] = []
         self._field_name = field_name
-
-        if max_count == 0:
-            self._max_count = randint(1, 10)
-        else:
-            self._max_count = randint(1, max_count)
+        self._max_count = max_count
 
     @property
     def field_name(self):
@@ -61,11 +57,15 @@ class Plural(Component):
     def add(self, component: Component):
         self._children.append(component)
         return self
+    
+    def __num_examples_to_generate(self):
+        if self._max_count == 0:
+            return randint(1,10)
+        return randint(1, self._max_count)
 
     def generate_data(self):
         composite = []
-
-        for _ in range(self._max_count):
+        for _ in range(self.__num_examples_to_generate()):
             child_data = {}
             for component in self._children:
                 field_name = component.field_name
