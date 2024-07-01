@@ -2,4 +2,4 @@ venv
 __pycache__
 build
 dist
-open_data_synthesizer.egg-info
+*.egg-info

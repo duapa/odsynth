@@ -1,5 +1,5 @@
 [package]
-name = "open-data-synthesizer"
+name = "odsynth"
 version = "0.1.0"
 description = "An open data synthesizer"
 url = "https://github.com/kbaafi/data-synthesizer"
