@@ -1,9 +1,12 @@
 import json
 from typing import Any, Dict, List
 
-from .base_transformer import BaseTransformer
+from .abstract_transformer import AbstractTransformer
 
 
-class JsonTransformer(BaseTransformer):
+class JsonTransformer(AbstractTransformer):
     def transform(self, data: List[Dict[str, Any]]):
-        return json.dumps(data)
+        list_json_str: List[str] = []
+        for item in data:
+            list_json_str.append(json.dumps(item))
+        return list_json_str

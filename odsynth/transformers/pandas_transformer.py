@@ -2,9 +2,9 @@ from typing import Any, Dict, List
 
 import pandas as pd
 
-from .base_transformer import BaseTransformer
+from .abstract_transformer import AbstractTransformer
 
 
-class PandasDataframeTransformer(BaseTransformer):
+class PandasDataframeTransformer(AbstractTransformer):
     def transform(self, data: List[Dict[str, Any]]):
         return pd.DataFrame(data=data)
