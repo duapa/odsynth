@@ -20,7 +20,7 @@ Users can specify a plugins directory where additional Primitive data generators
 ### Example
 `python odsynth/entry_points/demo.py --schema-spec=./sample_schema/schema_plural.yaml --plugins-dir=./sample_user_plugins --num-samples=3`
 
-This example relies on the schema at [./sample_schema/schema.yaml](./sample_schema/schema.yaml) which simulates the scenario of a parent having multiple children and produces an output similar what is shown below:
+This example uses the schema at [./sample_schema/schema.yaml](./sample_schema/schema.yaml) which simulates the scenario of a parent having multiple children to produce an output similar what is shown below:
 
 ```json
 {
@@ -45,8 +45,13 @@ This example relies on the schema at [./sample_schema/schema.yaml](./sample_sche
 Extending the solution by adding user-defined providers is possible by creating your own plugins in a 'plugin folder' and specifying the plugin folder when calling the application. An example provider which uses `faker`'s `ssn` provider to generate fictitious American Social Security Numbers is available at [./sample_user_plugins](./sample_user_plugins/ssn.py)
 
 # Next Steps
+* DOM Validation
 * Build Transformer for Spark
+* Build Transformer for XML
 * Build Data Publishers
     * Build Data -> S3 utility
     * Build Data -> Kafka utility
-* Any other ideas
+    * Build Data -> Rest API utility
+    * etc
+* Implement a strategy pattern for running data publishers
+* Dockerization for publishers 
