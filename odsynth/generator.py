@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from .core import Component, Composite, Plural
 from .provider_factory import ProviderFactory
-from .transformers import BaseTransformer
+from .transformers import AbstractTransformer
 from .utils import load_yaml
 
 PROVIDER_KEY = "provider"
@@ -59,7 +59,7 @@ class DataGenerator:
         num_examples: int = 10,
         batch_size: int = 5,
         plugins_dir: str = None,
-        transformer: BaseTransformer = None,
+        transformer: AbstractTransformer = None,
     ) -> None:
         self._schema_spec_file = schema_spec_file
         self._num_examples = num_examples

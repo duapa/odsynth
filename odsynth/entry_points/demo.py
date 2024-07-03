@@ -1,7 +1,7 @@
 import typer
 from typing_extensions import Annotated
 
-from odsynth.data_generator import DataGenerator
+from odsynth.generator import DataGenerator
 from odsynth.transformers import JsonTransformer, PandasDataframeTransformer
 from odsynth.utils import load_yaml
 

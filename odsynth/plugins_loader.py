@@ -8,6 +8,11 @@ from typing import List
 USER_PLUGINS_NAMESPACE = "user_providers"
 
 
+class PluginLoadException(Exception):
+    def __init__(self, *args: object) -> types.NoneType:
+        super().__init__(*args)
+
+
 def get_plugin_files(plugin_folder_name: str) -> List[str]:
     plugins: List[str] = []
     try:
@@ -16,7 +21,9 @@ def get_plugin_files(plugin_folder_name: str) -> List[str]:
                 if file_name.endswith(".py") and file_name != "__init__.py":
                     plugins.append(f"{plugin_folder_name}/{file_name}")
     except Exception as walk_exception:
-        raise f"An error occured while trying to read user provided plugins. Plugin folder: {plugin_folder_name}. Exception: {str(walk_exception)}"
+        raise PluginLoadException(
+            f"An error occured while trying to read user provided plugins. Plugin folder: {plugin_folder_name}. Exception: {str(walk_exception)}"
+        )
     return plugins
 
 
