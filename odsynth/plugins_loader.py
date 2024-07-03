@@ -8,21 +8,21 @@ from typing import List
 USER_PLUGINS_NAMESPACE = "user_providers"
 
 
-class PluginLoadException(Exception):
+class DirectoryNotFoundException(Exception):
     def __init__(self, *args: object) -> types.NoneType:
         super().__init__(*args)
 
 
-def get_plugin_files(plugin_folder_name: str) -> List[str]:
+def get_plugin_files(plugin_folder_name: str = None) -> List[str]:
     plugins: List[str] = []
-    try:
+    if plugin_folder_name and os.path.exists(plugin_folder_name) and os.path.isdir(plugin_folder_name):
         for _, _, file_names in os.walk(plugin_folder_name):
             for file_name in file_names:
                 if file_name.endswith(".py") and file_name != "__init__.py":
                     plugins.append(f"{plugin_folder_name}/{file_name}")
-    except Exception as walk_exception:
-        raise PluginLoadException(
-            f"An error occured while trying to read user provided plugins. Plugin folder: {plugin_folder_name}. Exception: {str(walk_exception)}"
+    else:
+        raise DirectoryNotFoundException(
+            f"An error occured while trying to read user provided plugins. Plugin folder: {plugin_folder_name} not found."
         )
     return plugins
 
