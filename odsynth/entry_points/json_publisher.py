@@ -26,13 +26,13 @@ def publish_data(
         None, help="Location for user added data generation providers."
     ),
     max_num_workers: int = typer.Option(
-        2, 
-        help="For concurrent writing of generated data, the maximum number of threads that write the data"
+        2,
+        help="For concurrent writing of generated data, the maximum number of threads that write the data",
     ),
     queue_size: int = typer.Option(
         10,
-        help="For concurrent writing of generated data, the size of the queue where data is pushed before processing"
-    )
+        help="For concurrent writing of generated data, the size of the queue where data is pushed before processing",
+    ),
 ):
     publisher = Publisher(
         schema_spec_file=schema_spec_file,
@@ -42,7 +42,7 @@ def publish_data(
         run_as_daemon=run_as_daemon,
         writer=JsonToDiscWriter(base_dir=output_dir),
         max_num_workers=max_num_workers,
-        queue_size=queue_size
+        queue_size=queue_size,
     )
     publisher.publish_data()
 
