@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from typing import Any, Dict
 
 from .core import Component, Composite, Plural
@@ -13,6 +14,8 @@ SUB_FIELDS_KEY = "fields"
 DOM_ROOT_KEY = "$__dom__root"
 PLURAL_MAX_COUNT = "max_count"
 PLURAL_MARKER = "plural_"
+HOME = os.environ.get("ODSYNTH_HOME", None)
+PROVIDERS_SUB_DIR = "providers"
 
 
 def convert_max_str_int(max_str: str) -> int:
@@ -66,7 +69,9 @@ class DataGenerator:
         self._batch_size = batch_size
         self._user_plugins_dir = plugins_dir
         self._transformer = transformer
-        ProviderFactory.load_providers(self._user_plugins_dir)
+        if HOME:
+            provider_plugins_dir = f"{HOME}/{PROVIDERS_SUB_DIR}"
+            ProviderFactory.load_providers(provider_plugins_dir)
 
     def get_data(self):
         schema = load_yaml(self._schema_spec_file)

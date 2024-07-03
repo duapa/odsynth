@@ -15,15 +15,20 @@ class DirectoryNotFoundException(Exception):
 
 def get_plugin_files(plugin_folder_name: str = None) -> List[str]:
     plugins: List[str] = []
-    if plugin_folder_name and os.path.exists(plugin_folder_name) and os.path.isdir(plugin_folder_name):
+    if (
+        plugin_folder_name
+        and os.path.exists(plugin_folder_name)
+        and os.path.isdir(plugin_folder_name)
+    ):
         for _, _, file_names in os.walk(plugin_folder_name):
             for file_name in file_names:
                 if file_name.endswith(".py") and file_name != "__init__.py":
                     plugins.append(f"{plugin_folder_name}/{file_name}")
     else:
-        raise DirectoryNotFoundException(
-            f"An error occured while trying to read user provided plugins. Plugin folder: {plugin_folder_name} not found."
-        )
+        err_msg = "An error occured while trying to read user provided plugins"
+        err_msg += f"Plugin folder: {plugin_folder_name} not found."
+        err_msg += "Check if your home folder is properly set."
+        raise DirectoryNotFoundException(err_msg)
     return plugins
 
 
