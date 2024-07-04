@@ -71,30 +71,29 @@ class DataGenerator:
         self._transformer = transformer
         if HOME:
             provider_plugins_dir = f"{HOME}/{PROVIDERS_SUB_DIR}"
-            ProviderFactory.load_providers(provider_plugins_dir)
+        else:
+            provider_plugins_dir = None
+        ProviderFactory.load_providers(provider_plugins_dir)
+        self._schema = load_yaml(self._schema_spec_file)
+        self._dom = generate_dom(DOM_ROOT_KEY, self._schema)
 
     def get_data(self):
-        schema = load_yaml(self._schema_spec_file)
-        data_object_model = generate_dom(DOM_ROOT_KEY, schema)
         data_points = []
         for _ in range(self._num_examples):
-            data_points.append(data_object_model.generate_data())
+            data_points.append(self._dom.generate_data())
         if self._transformer is None:
             return data_points
         return self._transformer.transform(data_points)
 
     def yield_data(self):
-        schema = load_yaml(self._schema_spec_file)
-        data_object_model = generate_dom(DOM_ROOT_KEY, schema)
-
         num_batches, remainder = divmod(self._num_examples, self._batch_size)
         for _ in range(num_batches):
             data_points = []
             for _ in range(self._batch_size):
-                data_points.append(data_object_model.generate_data())
+                data_points.append(self._dom.generate_data())
             yield data_points
         if remainder > 0:
             data_points = []
             for _ in range(remainder):
-                data_points.append(data_object_model.generate_data())
+                data_points.append(self._dom.generate_data())
             yield data_points
