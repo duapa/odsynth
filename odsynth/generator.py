@@ -13,6 +13,7 @@ PROVIDER_ARGS_KEY = "provider_args"
 SUB_FIELDS_KEY = "fields"
 DOM_ROOT_KEY = "$__dom__root"
 PLURAL_MAX_COUNT = "max_count"
+ARRAY_TYPE_MARKER = "is_array"
 PLURAL_MARKER = "plural_"
 HOME = os.environ.get("ODSYNTH_HOME", None)
 PROVIDERS_SUB_DIR = "providers"
@@ -24,35 +25,6 @@ def convert_max_str_int(max_str: str) -> int:
         return max_int
     except ValueError:
         return 0
-
-
-def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
-    if field_name == DOM_ROOT_KEY:
-        root = Composite(DOM_ROOT_KEY)
-        for k, v in schema.items():
-            root.add(generate_dom(k, v))
-        return root
-    elif PROVIDER_KEY in schema:
-        provider_name = schema[PROVIDER_KEY]
-        args = schema[PROVIDER_ARGS_KEY] if PROVIDER_ARGS_KEY in schema else {}
-        provider = ProviderFactory.get_provider(provider_name, args)
-        provider.field_name = field_name
-        return provider
-    elif SUB_FIELDS_KEY in schema and field_name.startswith(PLURAL_MARKER):
-        if PLURAL_MAX_COUNT in schema:
-            max_count = convert_max_str_int(schema[PLURAL_MAX_COUNT])
-        else:
-            max_count = 0
-        child_field_name = field_name.split(PLURAL_MARKER)[1]
-        root = Plural(field_name=child_field_name, max_count=max_count)
-        for k, v in schema[SUB_FIELDS_KEY].items():
-            root.add(generate_dom(k, v))
-        return root
-    elif SUB_FIELDS_KEY in schema:
-        root = Composite(field_name)
-        for k, v in schema[SUB_FIELDS_KEY].items():
-            root.add(generate_dom(k, v))
-        return root
 
 
 class DataGenerator:
@@ -75,7 +47,29 @@ class DataGenerator:
             provider_plugins_dir = None
         ProviderFactory.load_providers(provider_plugins_dir)
         self._schema = load_yaml(self._schema_spec_file)
-        self._dom = generate_dom(DOM_ROOT_KEY, self._schema)
+        self._dom = self.build_object_model(DOM_ROOT_KEY, self._schema)
+
+    def build_object_model(self, field_name: str, schema: Dict[str, Any]):
+        if PROVIDER_KEY not in schema and SUB_FIELDS_KEY not in schema:
+            raise ValueError("Subfields must either be a Compound field or a Primitive Fields")
+        if PROVIDER_KEY in schema and SUB_FIELDS_KEY in schema:
+            raise ValueError("Subfields must either be a Compound field or a Primitive Fields")
+        if PROVIDER_KEY in schema:
+            provider_name = schema[PROVIDER_KEY]
+            args = schema[PROVIDER_ARGS_KEY] if PROVIDER_ARGS_KEY in schema else {}
+            provider = ProviderFactory.get_provider(provider_name, args)
+            provider.field_name = field_name
+            return provider
+        elif SUB_FIELDS_KEY in schema:
+            root = Composite(field_name)
+            max_count = 0
+            if PLURAL_MAX_COUNT in schema:
+                max_count = convert_max_str_int(schema[PLURAL_MAX_COUNT])
+            if ARRAY_TYPE_MARKER in schema and schema[ARRAY_TYPE_MARKER] is True:
+                root = Plural(field_name=field_name, max_count=max_count)
+            for k, v in schema[SUB_FIELDS_KEY].items():
+                root.add(self.build_object_model(k, v))
+            return root
 
     def get_data(self):
         data_points = []
