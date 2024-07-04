@@ -1,8 +1,8 @@
 from typing import Any, Dict
 
-from .core import Provider
-from .plugins_loader import load_plugins
-from .providers import FirstName, LastName, RandomInt, Text
+from ..core import Provider
+from ..plugins_loader import load_plugins
+from . import FirstName, LastName, RandomInt, Text
 
 
 class ProviderFactory:

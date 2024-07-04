@@ -4,7 +4,7 @@ import os
 from typing import Any, Dict
 
 from .core import Composite
-from .provider_factory import ProviderFactory
+from .providers import ProviderFactory
 from .transformers import AbstractTransformer
 from .utils import load_yaml
 
