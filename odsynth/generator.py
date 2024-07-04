@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from typing import Any, Dict
 
-from .core import Component, Composite, Plural
+from .core import Composite
 from .provider_factory import ProviderFactory
 from .transformers import AbstractTransformer
 from .utils import load_yaml
@@ -51,9 +51,13 @@ class DataGenerator:
 
     def build_object_model(self, field_name: str, schema: Dict[str, Any]):
         if PROVIDER_KEY not in schema and SUB_FIELDS_KEY not in schema:
-            raise ValueError("Subfields must either be a Compound field or a Primitive Fields")
+            raise ValueError(
+                "Subfields must either be a Compound field or a Primitive Fields"
+            )
         if PROVIDER_KEY in schema and SUB_FIELDS_KEY in schema:
-            raise ValueError("Subfields must either be a Compound field or a Primitive Fields")
+            raise ValueError(
+                "Subfields must either be a Compound field or a Primitive Fields"
+            )
         if PROVIDER_KEY in schema:
             provider_name = schema[PROVIDER_KEY]
             args = schema[PROVIDER_ARGS_KEY] if PROVIDER_ARGS_KEY in schema else {}
@@ -61,12 +65,16 @@ class DataGenerator:
             provider.field_name = field_name
             return provider
         elif SUB_FIELDS_KEY in schema:
-            root = Composite(field_name)
             max_count = 0
+            is_array = False
             if PLURAL_MAX_COUNT in schema:
                 max_count = convert_max_str_int(schema[PLURAL_MAX_COUNT])
             if ARRAY_TYPE_MARKER in schema and schema[ARRAY_TYPE_MARKER] is True:
-                root = Plural(field_name=field_name, max_count=max_count)
+                is_array = True
+
+            root = Composite(
+                field_name=field_name, max_count=max_count, is_array=is_array
+            )
             for k, v in schema[SUB_FIELDS_KEY].items():
                 root.add(self.build_object_model(k, v))
             return root
