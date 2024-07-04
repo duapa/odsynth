@@ -13,6 +13,7 @@ PROVIDER_ARGS_KEY = "provider_args"
 SUB_FIELDS_KEY = "fields"
 DOM_ROOT_KEY = "$__dom__root"
 PLURAL_MAX_COUNT = "max_count"
+ARRAY_TYPE_MARKER = "is_array"
 PLURAL_MARKER = "plural_"
 HOME = os.environ.get("ODSYNTH_HOME", None)
 PROVIDERS_SUB_DIR = "providers"
@@ -27,29 +28,23 @@ def convert_max_str_int(max_str: str) -> int:
 
 
 def generate_dom(field_name: str, schema: Dict[str, Any]) -> Component:
-    if field_name == DOM_ROOT_KEY:
-        root = Composite(DOM_ROOT_KEY)
-        for k, v in schema.items():
-            root.add(generate_dom(k, v))
-        return root
-    elif PROVIDER_KEY in schema:
+    if PROVIDER_KEY not in schema and SUB_FIELDS_KEY not in schema:
+        raise ValueError("Subfields must either be a Compound field or a Primitive Fields")
+    if PROVIDER_KEY in schema and SUB_FIELDS_KEY in schema:
+        raise ValueError("Subfields must either be a Compound field or a Primitive Fields")
+    if PROVIDER_KEY in schema:
         provider_name = schema[PROVIDER_KEY]
         args = schema[PROVIDER_ARGS_KEY] if PROVIDER_ARGS_KEY in schema else {}
         provider = ProviderFactory.get_provider(provider_name, args)
         provider.field_name = field_name
         return provider
-    elif SUB_FIELDS_KEY in schema and field_name.startswith(PLURAL_MARKER):
-        if PLURAL_MAX_COUNT in schema:
-            max_count = convert_max_str_int(schema[PLURAL_MAX_COUNT])
-        else:
-            max_count = 0
-        child_field_name = field_name.split(PLURAL_MARKER)[1]
-        root = Plural(field_name=child_field_name, max_count=max_count)
-        for k, v in schema[SUB_FIELDS_KEY].items():
-            root.add(generate_dom(k, v))
-        return root
     elif SUB_FIELDS_KEY in schema:
         root = Composite(field_name)
+        max_count = 0
+        if PLURAL_MAX_COUNT in schema:
+            max_count = convert_max_str_int(schema[PLURAL_MAX_COUNT])
+        if ARRAY_TYPE_MARKER in schema and schema[ARRAY_TYPE_MARKER] is True:
+            root = Plural(field_name=field_name, max_count=max_count)
         for k, v in schema[SUB_FIELDS_KEY].items():
             root.add(generate_dom(k, v))
         return root

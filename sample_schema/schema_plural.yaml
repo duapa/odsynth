@@ -1,18 +1,20 @@
-parent_firstname:
-  provider: first_name
-parent_lastname:
-  provider: last_name
-plural_children:
-  fields:
-    firstname:
-      provider: first_name
-    lastname:
-      provider: last_name
-  max_count: 20
-parent_age:
-  provider: random_int
-  provider_args:
-    min: 25
-    max: 55
-parent_ssn:
-  provider: com.github.kbaafi.us_ssn
+fields:
+  parent_firstname:
+    provider: first_name
+  parent_lastname:
+    provider: last_name
+  children:
+    fields:
+      firstname:
+        provider: first_name
+      lastname:
+        provider: last_name
+    max_count: 20
+    is_array: true
+  parent_age:
+    provider: random_int
+    provider_args:
+      min: 25
+      max: 55
+  parent_ssn:
+    provider: com.github.kbaafi.us_ssn
