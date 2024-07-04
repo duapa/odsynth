@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from typing import Any, Dict
 
 from .core import Component, Composite, Plural
@@ -13,6 +14,8 @@ SUB_FIELDS_KEY = "fields"
 DOM_ROOT_KEY = "$__dom__root"
 PLURAL_MAX_COUNT = "max_count"
 PLURAL_MARKER = "plural_"
+HOME = os.environ.get("ODSYNTH_HOME", None)
+PROVIDERS_SUB_DIR = "providers"
 
 
 def convert_max_str_int(max_str: str) -> int:
@@ -66,30 +69,31 @@ class DataGenerator:
         self._batch_size = batch_size
         self._user_plugins_dir = plugins_dir
         self._transformer = transformer
-        ProviderFactory.load_providers(self._user_plugins_dir)
+        if HOME:
+            provider_plugins_dir = f"{HOME}/{PROVIDERS_SUB_DIR}"
+        else:
+            provider_plugins_dir = None
+        ProviderFactory.load_providers(provider_plugins_dir)
+        self._schema = load_yaml(self._schema_spec_file)
+        self._dom = generate_dom(DOM_ROOT_KEY, self._schema)
 
     def get_data(self):
-        schema = load_yaml(self._schema_spec_file)
-        data_object_model = generate_dom(DOM_ROOT_KEY, schema)
         data_points = []
         for _ in range(self._num_examples):
-            data_points.append(data_object_model.generate_data())
+            data_points.append(self._dom.generate_data())
         if self._transformer is None:
             return data_points
         return self._transformer.transform(data_points)
 
     def yield_data(self):
-        schema = load_yaml(self._schema_spec_file)
-        data_object_model = generate_dom(DOM_ROOT_KEY, schema)
-
         num_batches, remainder = divmod(self._num_examples, self._batch_size)
         for _ in range(num_batches):
             data_points = []
             for _ in range(self._batch_size):
-                data_points.append(data_object_model.generate_data())
+                data_points.append(self._dom.generate_data())
             yield data_points
         if remainder > 0:
             data_points = []
             for _ in range(remainder):
-                data_points.append(data_object_model.generate_data())
+                data_points.append(self._dom.generate_data())
             yield data_points
