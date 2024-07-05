@@ -44,14 +44,17 @@ This example uses the schema at [./sample_schema/schema.yaml](./sample_schema/sc
 # Extensibility
 Extending the solution by adding user-defined providers is possible by creating your own plugins in a 'plugin folder' and specifying the plugin folder when calling the application. An example provider which uses `faker`'s `ssn` provider to generate fictitious American Social Security Numbers is available at [./sample_user_plugins](./sample_user_plugins/ssn.py)
 
-# Next Steps
-* DOM Validation
+# Development Roadmap
+* Add a logger
+* Better DOM Validation
 * Build Transformer for Spark
-* Build Transformer for XML
+* ~~Build Transformer for XML~~
+* ~~Build Writer for XML~~
 * Build Data Publishers
     * Build Data -> S3 utility
     * Build Data -> Kafka utility
     * Build Data -> Rest API utility
     * etc
-* Implement a strategy pattern for running data publishers
+* ~~Implement a strategy pattern| 'selector' for data writers and transformers~~
+* Implement plugin system for data writers and transformers
 * Dockerization for publishers 
