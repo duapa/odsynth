@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import os
 from typing import Any, Dict
 
 from .core import Composite
+from .globals import DOM_ROOT_KEY
 from .providers import ProviderFactory
 from .transformers import AbstractTransformer
 from .utils import load_yaml
@@ -11,12 +11,8 @@ from .utils import load_yaml
 PROVIDER_KEY = "provider"
 PROVIDER_ARGS_KEY = "provider_args"
 SUB_FIELDS_KEY = "fields"
-DOM_ROOT_KEY = "$__dom__root"
-PLURAL_MAX_COUNT = "max_count"
+MAX_COUNT_KEY = "max_count"
 ARRAY_TYPE_MARKER = "is_array"
-PLURAL_MARKER = "plural_"
-HOME = os.environ.get("ODSYNTH_HOME", None)
-PROVIDERS_SUB_DIR = "providers"
 
 
 def convert_max_str_int(max_str: str) -> int:
@@ -41,15 +37,11 @@ class DataGenerator:
         self._batch_size = batch_size
         self._user_plugins_dir = plugins_dir
         self._transformer = transformer
-        if HOME:
-            provider_plugins_dir = f"{HOME}/{PROVIDERS_SUB_DIR}"
-        else:
-            provider_plugins_dir = None
-        ProviderFactory.load_providers(provider_plugins_dir)
         self._schema = load_yaml(self._schema_spec_file)
         self._dom = self.build_object_model(DOM_ROOT_KEY, self._schema)
 
     def build_object_model(self, field_name: str, schema: Dict[str, Any]):
+        # Validate the schema
         if PROVIDER_KEY not in schema and SUB_FIELDS_KEY not in schema:
             raise ValueError(
                 "Subfields must either be a Compound field or a Primitive Fields"
@@ -58,6 +50,8 @@ class DataGenerator:
             raise ValueError(
                 "Subfields must either be a Compound field or a Primitive Fields"
             )
+
+        # Generate the DOM
         if PROVIDER_KEY in schema:
             provider_name = schema[PROVIDER_KEY]
             args = schema[PROVIDER_ARGS_KEY] if PROVIDER_ARGS_KEY in schema else {}
@@ -67,8 +61,8 @@ class DataGenerator:
         elif SUB_FIELDS_KEY in schema:
             max_count = 0
             is_array = False
-            if PLURAL_MAX_COUNT in schema:
-                max_count = convert_max_str_int(schema[PLURAL_MAX_COUNT])
+            if MAX_COUNT_KEY in schema:
+                max_count = convert_max_str_int(schema[MAX_COUNT_KEY])
             if ARRAY_TYPE_MARKER in schema and schema[ARRAY_TYPE_MARKER] is True:
                 is_array = True
 
