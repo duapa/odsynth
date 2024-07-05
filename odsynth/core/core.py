@@ -62,7 +62,7 @@ class Composite(Component):
 
 
 class Provider(Component):
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
         self._field_name = None
         self._kwargs = kwargs
 
@@ -77,10 +77,6 @@ class Provider(Component):
     @property
     def provider_kwargs(self):
         return self._kwargs
-
-    @provider_kwargs.setter
-    def provider_kwargs(self, value: dict):
-        self._kwargs = value
 
     def generate_data(self):
         raise NotImplementedError(
