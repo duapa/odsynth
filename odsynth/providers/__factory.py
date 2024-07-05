@@ -2,7 +2,9 @@ from typing import Any, Dict
 
 from ..core import Provider
 from ..plugins_loader import load_plugins
-from . import FirstName, LastName, RandomInt, Text
+from .random_int import RandomInt
+from .simple_text import FirstName, LastName, Text
+from ..globals import get_providers_home
 
 
 class ProviderFactory:
@@ -19,11 +21,10 @@ class ProviderFactory:
 
     @classmethod
     def get_provider(
-        cls, provider_name: str, provider_kwargs: Dict[str, Any] = {}
+        cls, provider_name: str, *args, **kwargs
     ) -> Provider:
         if provider_name in cls._providers:
-            provider = cls._providers[provider_name]()
-            provider.provider_kwargs = provider_kwargs
+            provider = cls._providers[provider_name](*args, **kwargs)
             return provider
         raise ValueError(f"Specified provider {provider_name} is not supported")
 
@@ -36,3 +37,6 @@ class ProviderFactory:
 
         if plugins_dir:
             load_plugins(plugin_folder_name=plugins_dir)
+
+
+ProviderFactory.load_providers(get_providers_home())
