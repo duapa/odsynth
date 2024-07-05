@@ -19,3 +19,7 @@ class JsonToDiscWriter(AbstractWriter):
             for item in self._transformer.transform(data):
                 file.write(item)
                 file.write("\n")
+
+    @classmethod
+    def get_name(cls) -> str:
+        return "json_to_disc"
