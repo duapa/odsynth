@@ -2,7 +2,7 @@ import typer
 from typing_extensions import Annotated
 
 from odsynth.publisher import Publisher
-from odsynth.writers import JsonToDiscWriter
+from odsynth.writers import WriterFactory
 
 app = typer.Typer()
 
@@ -33,6 +33,10 @@ def publish_data(
         10,
         help="For concurrent writing of generated data, the size of the queue where data is pushed before processing",
     ),
+    writer: str = typer.Option(
+        "json_to_disc",
+        help = "A writer that persists generated data to a desired medium."
+    )
 ):
     publisher = Publisher(
         schema_spec_file=schema_spec_file,
@@ -40,7 +44,7 @@ def publish_data(
         num_examples=num_samples,
         batch_size=batch_size,
         run_as_daemon=run_as_daemon,
-        writer=JsonToDiscWriter(base_dir=output_dir),
+        writer=WriterFactory.get_writer(writer, base_dir=output_dir),
         max_num_workers=max_num_workers,
         queue_size=queue_size,
     )
