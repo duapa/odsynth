@@ -21,8 +21,9 @@ def main(
         None, help="Location for user added data generation providers."
     ),
     transformer: str = typer.Option(
-        None, help="Transformer used to render the generated data. Default = List of Dicts"
-    )
+        None,
+        help="Transformer used to render the generated data. Default = List of Dicts",
+    ),
 ):
     generator = DataGenerator(
         schema_spec_file=schema_spec_file,

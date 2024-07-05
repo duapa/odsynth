@@ -35,8 +35,8 @@ def publish_data(
     ),
     writer: str = typer.Option(
         "json_to_disc",
-        help = "A writer that persists generated data to a desired medium."
-    )
+        help="A writer that persists generated data to a desired medium.",
+    ),
 ):
     publisher = Publisher(
         schema_spec_file=schema_spec_file,
