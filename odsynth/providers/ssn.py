@@ -11,4 +11,3 @@ class SSN(Provider):
     def generate_data(self):
         faker = Faker()
         return faker.ssn()
-
