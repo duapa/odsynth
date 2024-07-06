@@ -30,11 +30,11 @@ def publish_data(
     ),
     max_num_workers: int = typer.Option(
         2,
-        help="For concurrent writing of generated data, the maximum number of threads that write the data",
+        help="Maximum number of threads created when writing data",
     ),
     queue_size: int = typer.Option(
         10,
-        help="For concurrent writing of generated data, the size of the queue where data is pushed before processing",
+        help="Size of the queue for thread pool when writing data",
     ),
 ):
     timestamp = int(time.time() * 1e6)

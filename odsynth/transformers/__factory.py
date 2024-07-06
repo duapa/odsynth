@@ -1,6 +1,5 @@
 from typing import Optional
 
-from ..globals import HOME
 from .abstract_transformer import AbstractTransformer
 from .json_transformer import JsonTransformer
 from .pandas_transformer import PandasDataframeTransformer

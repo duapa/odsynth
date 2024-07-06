@@ -38,7 +38,6 @@ def load_plugins(plugin_folder_name: str) -> None:
     plugins = get_plugin_files(plugin_folder_name)
 
     for plugin in plugins:
-
         module_name = plugin.split("/")[-1].replace(".py", "")
         module_name = f"{USER_PLUGINS_NAMESPACE}.{module_name}"
 

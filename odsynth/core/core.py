@@ -11,6 +11,7 @@ class Component(ABC):
         """Returns field name of component"""
         raise NotImplementedError("field_name must be implemented in subclass")
 
+    @abstractmethod
     def generate_data(self):
         """Returns a dictionary representation of the generated data"""
         raise NotImplementedError("generate_data must be implemented in subclasses")
