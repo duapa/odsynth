@@ -14,11 +14,14 @@ class WriterFactory:
         cls._writers.update({writer.get_name(): writer})
 
     @classmethod
-    def get_writer(cls, writer_name: str, *args, **kwargs):
-        if writer_name in cls._writers:
-            return cls._writers[writer_name](*args, **kwargs)
+    def get_writer(cls, writer_name: str, **kwargs) -> AbstractWriter:
+        factory_args = {"writer_name"}
+        class_kwargs = {k: v for k, v in kwargs.items() if k not in factory_args}
 
-        raise ValueError(f"Specified transformer {writer_name} is not supported")
+        if writer_name in cls._writers:
+            return cls._writers[writer_name](**class_kwargs)
+
+        raise ValueError(f"Specified writer {writer_name} is not supported")
 
     @classmethod
     def load_writers(cls):
@@ -26,4 +29,5 @@ class WriterFactory:
         cls.register_writer(XMLToDiscWriter)
 
 
-WriterFactory.load_writers()
+def load_writers():
+    WriterFactory.load_writers()
