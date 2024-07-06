@@ -10,3 +10,7 @@ class JsonTransformer(AbstractTransformer):
         for item in data:
             list_json_str.append(json.dumps(item))
         return list_json_str
+
+    @classmethod
+    def get_name(cls) -> str:
+        return "json"

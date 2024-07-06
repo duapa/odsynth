@@ -1,4 +1,4 @@
-import json
+import os
 import time
 from typing import Any, Dict, List
 
@@ -13,9 +13,14 @@ class JsonToDiscWriter(AbstractWriter):
         self._transformer = JsonTransformer()
 
     def write_data(self, data: List[Dict[str, Any]]):
+        os.makedirs(self._base_dir, exist_ok=True)
         timestamp = int(time.time() * 1e6)
         filename = f"{self._base_dir}/odsynth_{timestamp}.json"
         with open(filename, "w") as file:
             for item in self._transformer.transform(data):
                 file.write(item)
                 file.write("\n")
+
+    @classmethod
+    def get_name(cls) -> str:
+        return "json_to_disc"

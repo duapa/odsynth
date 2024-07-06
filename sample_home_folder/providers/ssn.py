@@ -1,7 +1,7 @@
 from faker import Faker
 
 from odsynth.core import Provider
-from odsynth.provider_factory import ProviderFactory
+from odsynth.providers import ProviderFactory
 
 
 class SSN(Provider):
