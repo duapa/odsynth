@@ -4,8 +4,8 @@ from typing import Any, Dict
 
 from .core import Composite
 from .globals import DOM_ROOT_KEY
-from .providers import ProviderFactory
-from .transformers import AbstractTransformer
+from .providers import ProviderFactory, load_providers
+from .transformers import TransformerFactory, load_transformers
 from .utils import load_yaml
 
 PROVIDER_KEY = "provider"
@@ -13,6 +13,10 @@ PROVIDER_ARGS_KEY = "provider_args"
 SUB_FIELDS_KEY = "fields"
 MAX_COUNT_KEY = "max_count"
 ARRAY_TYPE_MARKER = "is_array"
+
+
+load_providers()
+load_transformers()
 
 
 def convert_max_str_int(max_str: str) -> int:
@@ -30,13 +34,13 @@ class DataGenerator:
         num_examples: int = 10,
         batch_size: int = 5,
         plugins_dir: str = None,
-        transformer: AbstractTransformer = None,
+        transformer_name: str = None,
     ) -> None:
         self._schema_spec_file = schema_spec_file
         self._num_examples = num_examples
         self._batch_size = batch_size
         self._user_plugins_dir = plugins_dir
-        self._transformer = transformer
+        self._transformer = TransformerFactory.get_transformer(transformer_name)
         self._schema = load_yaml(self._schema_spec_file)
         self._dom = self.build_object_model(DOM_ROOT_KEY, self._schema)
 
@@ -54,8 +58,12 @@ class DataGenerator:
         # Generate the DOM
         if PROVIDER_KEY in schema:
             provider_name = schema[PROVIDER_KEY]
-            args = schema[PROVIDER_ARGS_KEY] if PROVIDER_ARGS_KEY in schema else {}
-            provider = ProviderFactory.get_provider(provider_name, args)
+            provider_kwargs = (
+                schema[PROVIDER_ARGS_KEY] if PROVIDER_ARGS_KEY in schema else {}
+            )
+            provider = ProviderFactory.get_provider(
+                provider_name, kwargs=provider_kwargs
+            )
             provider.field_name = field_name
             return provider
         elif SUB_FIELDS_KEY in schema:

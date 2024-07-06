@@ -1,9 +1,6 @@
 import typer
-from typing_extensions import Annotated
 
 from odsynth.generator import DataGenerator
-from odsynth.transformers import TransformerFactory
-from odsynth.utils import load_yaml
 
 app = typer.Typer()
 
@@ -29,7 +26,7 @@ def main(
         schema_spec_file=schema_spec_file,
         plugins_dir=plugins_dir,
         num_examples=num_samples,
-        transformer=TransformerFactory.get_transformer(transformer),
+        transformer_name=transformer,
         batch_size=batch_size,
     )
 

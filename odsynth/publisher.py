@@ -1,12 +1,12 @@
 import concurrent.futures
-import json
 import threading
-import time
 from queue import Queue
 from typing import Any, Dict, List
 
 from .generator import DataGenerator
-from .writers import AbstractWriter
+from .writers import AbstractWriter, load_writers
+
+load_writers()
 
 
 class Publisher:
@@ -28,6 +28,7 @@ class Publisher:
         self._run_as_daemon = run_as_daemon
         self._processing_queue = Queue(maxsize=queue_size)
         self._max_num_workers = max_num_workers
+        self._writer_shutdown_event = threading.Event()
         self._writer = writer
 
         if self._run_as_daemon:
@@ -44,7 +45,6 @@ class Publisher:
                 num_examples=self._num_examples,
                 batch_size=self._batch_size,
             )
-        self._writer_shutdown_event = threading.Event()
 
     def publish_data(self):
         def write_batch(batch: List[Dict[str, Any]]):

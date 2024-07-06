@@ -1,6 +1,9 @@
-import typer
-from typing_extensions import Annotated
+import os
+import time
 
+import typer
+
+from odsynth.globals import DEFAULT_OUTPUT_SUBDIR
 from odsynth.publisher import Publisher
 from odsynth.writers import WriterFactory
 
@@ -17,7 +20,7 @@ def publish_data(
         help="Number of examples to be generated in a batch"
     ),
     output_dir: str = typer.Option(
-        help="Location on disk where json data will be stored"
+        None, help="Location on disk where json data will be stored"
     ),
     run_as_daemon: bool = typer.Option(
         False, "--run-as-daemon", "-d", help="Run in infinite loop"
@@ -33,18 +36,22 @@ def publish_data(
         10,
         help="For concurrent writing of generated data, the size of the queue where data is pushed before processing",
     ),
-    writer: str = typer.Option(
-        "json_to_disc",
-        help="A writer that persists generated data to a desired medium.",
-    ),
 ):
+    timestamp = int(time.time() * 1e6)
+    if output_dir is None:
+        _output_dir = f"{os.getcwd()}/{DEFAULT_OUTPUT_SUBDIR}/xml/{timestamp}"
+    else:
+        _output_dir = f"{output_dir}/xml/{timestamp}"
+
     publisher = Publisher(
         schema_spec_file=schema_spec_file,
         plugins_dir=plugins_dir,
         num_examples=num_samples,
         batch_size=batch_size,
         run_as_daemon=run_as_daemon,
-        writer=WriterFactory.get_writer(writer, base_dir=output_dir),
+        writer=WriterFactory.get_writer(
+            writer_name="xml_to_disc", base_dir=_output_dir
+        ),
         max_num_workers=max_num_workers,
         queue_size=queue_size,
     )
