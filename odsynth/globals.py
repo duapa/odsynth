@@ -6,6 +6,7 @@ HOME = os.environ.get("ODSYNTH_HOME", None)
 PROVIDERS_HOME = "providers"
 TRANSFORMERS_HOME = "transformers"
 WRITERS_HOME = "writers"
+DEFAULT_OUTPUT_SUBDIR = "odsynth__output"
 
 
 def get_user_plugin_folder(plugins_folder: str):
