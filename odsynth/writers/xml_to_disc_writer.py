@@ -1,3 +1,4 @@
+import os
 import time
 import xml.etree.ElementTree as ET
 from typing import Any, Dict, List
@@ -28,6 +29,7 @@ class XMLToDiscWriter(AbstractWriter):
 
         xml_doc = pretty_xml(file_root)
 
+        os.makedirs(self._base_dir, exist_ok=True)
         timestamp = int(time.time() * 1e6)
         filename = f"{self._base_dir}/odsynth_{timestamp}.xml"
         with open(filename, "w") as file:
