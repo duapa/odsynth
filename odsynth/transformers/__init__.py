@@ -1,4 +1,4 @@
-from .__factory import TransformerFactory
+from .__factory import TransformerFactory, load_transformers
 from .abstract_transformer import AbstractTransformer
 from .json_transformer import JsonTransformer
 from .pandas_transformer import PandasDataframeTransformer
@@ -10,4 +10,5 @@ __all__ = [
     "PandasDataframeTransformer",
     "XMLTransformer",
     "TransformerFactory",
+    "load_transformers",
 ]
