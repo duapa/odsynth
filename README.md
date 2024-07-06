@@ -45,7 +45,7 @@ This example uses the schema at [./sample_schema/schema.yaml](./sample_schema/sc
 Extending the solution by adding user-defined providers is possible by creating your own plugins in a 'plugin folder' and specifying the plugin folder when calling the application. An example provider which uses `faker`'s `ssn` provider to generate fictitious American Social Security Numbers is available at [./sample_user_plugins](./sample_user_plugins/ssn.py)
 
 # Development Roadmap
-- [ ] Add a logger
+* [ ] Add a logger
 
 
 * Better DOM Validation
