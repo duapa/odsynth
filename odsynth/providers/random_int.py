@@ -32,25 +32,34 @@ class RandomInt(Provider):
             try:
                 _max = int(_max)
             except ValueError as ve:
-                raise ValueError(
-                    f"An error occurred while trying to validate kwargs for provider {__class__.get_provider_name()}: {str(ve)}"
+                err_msg = (
+                    "An error occurred while trying to validate kwargs for provider"
                 )
+                err_msg += f" {__class__.get_provider_name()}"
+                err_msg += f": {str(ve)}"
+
+                raise ValueError(err_msg)
         if MIN_KEY in self._kwargs:
             _min = self._kwargs[MIN_KEY]
             try:
                 _min = int(_min)
             except ValueError as ve:
-                raise ValueError(
-                    f"An error occurred while trying to validate kwargs for provider {__class__.get_provider_name()}: {str(ve)}"
+                err_msg = (
+                    "An error occurred while trying to validate kwargs for provider"
                 )
+                err_msg += f" {__class__.get_provider_name()}"
+                err_msg += f": {str(ve)}"
+                raise ValueError(err_msg)
         if _max is None:
             _max = DEFAULT_MAX_VALUE
         if _min is None:
             _min = DEFAULT_MIN_VALUE
         if _max < _min:
-            raise ValueError(
-                f"Min value {_min} cannot be greater than Max value {_max} in provider '{__class__.get_provider_name()}'"
+            err_msg = (
+                f"Min value {_min} cannot be greater than Max value {_max} in provider "
             )
+            err_msg += __class__.get_provider_name()
+            raise ValueError(err_msg)
         self._max = _max
         self._min = _min
 

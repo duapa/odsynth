@@ -1,7 +1,7 @@
 import os
 import time
 import xml.etree.ElementTree as ET
-from typing import Any, Dict, List
+from typing import List
 from xml.dom.minidom import parseString
 
 from odsynth.transformers import XMLTransformer

@@ -1,8 +1,4 @@
-import json
-import xml
-import xml.etree
 from typing import Any, Dict, List
-from xml.dom.minidom import parseString
 from xml.etree.ElementTree import Element, tostring
 
 from ..globals import DOM_ROOT_KEY

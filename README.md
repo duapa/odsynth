@@ -25,11 +25,11 @@ This example uses the schema at [./sample_schema/schema.yaml](./sample_schema/sc
 ```json
 {
     "firstname": "Bruce",
-    "lastname": "Henderson", 
+    "lastname": "Henderson",
     "children": [
-        {"firstname": "George", "lastname": "Clayton"}, 
+        {"firstname": "George", "lastname": "Clayton"},
         {"firstname": "Brianna", "lastname": "Mosley"},
-    ], 
+    ],
     "age": 37,
     "ssn": "604-35-3570"
 }
@@ -57,4 +57,4 @@ Extending the solution by adding user-defined providers is possible by creating 
     * etc
 * ~~Implement a strategy pattern| 'selector' for data writers and transformers~~
 * Implement plugin system for data writers and transformers
-* Dockerization for publishers 
+* Dockerization for publishers
