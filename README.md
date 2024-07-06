@@ -45,16 +45,18 @@ This example uses the schema at [./sample_schema/schema.yaml](./sample_schema/sc
 Extending the solution by adding user-defined providers is possible by creating your own plugins in a 'plugin folder' and specifying the plugin folder when calling the application. An example provider which uses `faker`'s `ssn` provider to generate fictitious American Social Security Numbers is available at [./sample_user_plugins](./sample_user_plugins/ssn.py)
 
 # Development Roadmap
-* Add a logger
-* Better DOM Validation
-* Build Transformer for Spark
-* ~~Build Transformer for XML~~
-* ~~Build Writer for XML~~
-* Build Data Publishers
-    * Build Data -> S3 utility
-    * Build Data -> Kafka utility
-    * Build Data -> Rest API utility
-    * etc
-* ~~Implement a strategy pattern| 'selector' for data writers and transformers~~
-* Implement plugin system for data writers and transformers
-* Dockerization for publishers
+* [ ] Add a logger
+* [ ] Improve DOM Validation
+* [ ] Data Transformer for Spark
+* [x] Build Data Transformer for Pandas
+* [x] Build Data Transformer for XML
+* [x] Build Data Writer for XML
+* [x] Build Data Transformer for JSON
+* [x] Build Data Writer for JSON
+* [ ] Build Data Writers for:
+    * [ ] S3
+    * [ ] Kafka
+    * [ ] (Possibly) to REST APIs
+    * [ ] (Possibly) for Metrics Systems like Prometheus
+* [ ] Implement a plugin system for users to add their own code(Providers, Writers and Transformers) in their own local system
+* [ ] (Possibly) Add examples for Dockerized deployment of Publishers
