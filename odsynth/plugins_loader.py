@@ -33,7 +33,7 @@ def get_plugin_files(plugin_folder_name: str = None) -> List[str]:
 
 
 def load_plugins(plugin_folder_name: str) -> None:
-    """Load the plugins defined in the plugin list"""
+    """Given a plugin folder, load all plugins into a namespace"""
 
     plugins = get_plugin_files(plugin_folder_name)
 

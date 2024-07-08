@@ -6,7 +6,7 @@ from odsynth.providers import ProviderFactory
 
 class SSN(Provider):
     @classmethod
-    def get_provider_name(cls):
+    def get_name(cls):
         return "com.github.kbaafi.us_ssn"
 
     def generate_data(self):
