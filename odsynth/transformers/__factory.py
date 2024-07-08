@@ -7,7 +7,8 @@ from .xml_transformer import XMLTransformer
 
 
 class TransformerFactory:
-    """Allows for registration and selection of various data transformers"""
+    """Implements the Strategy Pattern for choosing between
+    various implementations of data transformers"""
 
     _transformers = {}
 
