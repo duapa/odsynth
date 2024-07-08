@@ -60,3 +60,5 @@ Extending the solution by adding user-defined providers is possible by creating 
     * [ ] (Possibly) for Metrics Systems like Prometheus
 * [ ] Implement a plugin system for users to add their own code(Providers, Writers and Transformers) in their own local system
 * [ ] (Possibly) Add examples for Dockerized deployment of Publishers
+* [ ] Add Code and User documentation
+* [ ] Add CICD Pipeline for deploying python package to PyPi
