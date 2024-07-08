@@ -1,6 +1,6 @@
 from faker import Faker
 
-from ..core import Provider
+from ..core import Field
 
 faker = Faker()
 
@@ -11,7 +11,9 @@ DEFAULT_MIN_VALUE = 0
 DEFAULT_MAX_VALUE = 999999
 
 
-class RandomInt(Provider):
+class RandomInt(Field):
+    """Generates an random integer"""
+
     @property
     def field_name(self):
         return self._field_name
@@ -21,7 +23,7 @@ class RandomInt(Provider):
         self._field_name = value
 
     @classmethod
-    def get_provider_name(cls) -> str:
+    def get_name(cls) -> str:
         return "random_int"
 
     def validate_kwargs(self):
@@ -63,6 +65,7 @@ class RandomInt(Provider):
         self._max = _max
         self._min = _min
 
-    def generate_data(self):
+    def generate_data(self) -> int:
+        """Use Faker.random_int to generate a random integer"""
         self.validate_kwargs()
         return faker.random_int(min=self._min, max=self._max)

@@ -1,9 +1,14 @@
+import toml
 from setuptools import find_packages, setup
 
-from setup_utils import load_toml
+
+def load_toml(file_location: str):
+    with open(file_location, "r") as file:
+        data = toml.load(file)
+        return data
+
 
 config = load_toml("./setup_config.toml")
-
 
 setup(
     name=config["package"]["name"],
@@ -16,4 +21,5 @@ setup(
     url=config["package"]["url"],
     packages=find_packages(),
     install_requires=config["install_dependencies"]["deps"],
+    entry_points={"console_scripts": config["entry_points"]["scripts"]},
 )

@@ -1,3 +1,3 @@
-from .core import Component, Composite, Provider
+from .core import DataElement, Field, Record
 
-__all__ = ["Component", "Composite", "Provider"]
+__all__ = ["DataElement", "Record", "Field"]

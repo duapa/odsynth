@@ -15,7 +15,7 @@ fields:
       min: 25
       max: 55
   parent_ssn:
-    provider: com.github.kbaafi.us_ssn
+    provider: ssn
   parent_about:
     provider: text
     provider_args:
