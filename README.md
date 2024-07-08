@@ -48,6 +48,7 @@ Extending the solution by adding user-defined providers is possible by creating 
 * [ ] Add a logger
 * [ ] Improve DOM Validation
 * [ ] Data Transformer for Spark
+* [ ] Add support for optionals
 * [x] Build Data Transformer for Pandas
 * [x] Build Data Transformer for XML
 * [x] Build Data Writer for XML
@@ -62,3 +63,4 @@ Extending the solution by adding user-defined providers is possible by creating 
 * [ ] (Possibly) Add examples for Dockerized deployment of Publishers
 * [ ] Add Code and User documentation
 * [ ] Add CICD Pipeline for deploying python package to PyPi
+* [ ] Improve Local Python Packaging (because I am quite new to that)

@@ -9,4 +9,10 @@ name = "Kofi Baafi"
 email = "kbaafi@gmail.com"
 
 [install_dependencies]
-deps = ["toml", "faker", "typer", "pandas"]
+deps = ["toml","faker", "typer", "pandas"]
+
+[entry_points]
+scripts = [
+    'synth=odsynth.entry_points.synth:main',
+    'publish=odsynth.entry_points.publish:main',
+]
