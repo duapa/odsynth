@@ -4,7 +4,7 @@ from .xml_to_disc_writer import XMLToDiscWriter
 
 
 class WriterFactory:
-    """Implements the Strategy Pattern for choosing between
+    """Implements a strategy for choosing between
     various implementations of data writers"""
 
     _writers = {}

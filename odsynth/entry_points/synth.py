@@ -1,12 +1,12 @@
 import typer
 
-from odsynth.generator import DataGenerator
+from ..generator import DataGenerator
 
 app = typer.Typer()
 
 
 @app.command()
-def main(
+def generate_data_command(
     schema_spec_file: str = typer.Option(
         help="Location of schema definition for data generation"
     ),
@@ -34,5 +34,5 @@ def main(
     print(data)
 
 
-if __name__ == "__main__":
+def main():
     app()

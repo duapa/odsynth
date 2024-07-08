@@ -6,20 +6,25 @@ from xml.dom.minidom import parseString
 
 from odsynth.transformers import XMLTransformer
 
-from ..globals import XML_DOC_ROOT
+from ..globals import DEFAULT_OUTPUT_SUBDIR, XML_DOC_ROOT
 from .abstract_writer import AbstractWriter
 
 
 class XMLToDiscWriter(AbstractWriter):
-    def __init__(self, base_dir):
+    def __init__(self, output_dir):
         """
         Constructor for XMLToDiscWriter
 
         Parameters
         -
-        base_dir (str): Directory into which generated data is to be written
+        output_dir (str): Directory into which generated data is to be written
         """
-        self._base_dir = base_dir
+        timestamp = int(time.time() * 1e6)
+        if not output_dir:
+            _output_dir = f"{os.getcwd()}/{DEFAULT_OUTPUT_SUBDIR}/xml/{timestamp}"
+        else:
+            _output_dir = f"{output_dir}/xml/{timestamp}"
+        self._output_dir = _output_dir
         self._transformer = XMLTransformer()
 
     def write_data(self, data: List[str]):
@@ -43,9 +48,9 @@ class XMLToDiscWriter(AbstractWriter):
 
         xml_doc = pretty_xml(file_root)
 
-        os.makedirs(self._base_dir, exist_ok=True)
+        os.makedirs(self._output_dir, exist_ok=True)
         timestamp = int(time.time() * 1e6)
-        filename = f"{self._base_dir}/odsynth_{timestamp}.xml"
+        filename = f"{self._output_dir}/odsynth_{timestamp}.xml"
         with open(filename, "w") as file:
             file.write(xml_doc)
 
