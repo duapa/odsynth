@@ -1,4 +1,4 @@
-# Data Synthesizer
+# Yaml Schema + Faker == ODSynth
 
 This project produces a python application that can be configured to generate "any" kind of fake data, given a schema. The solution relies on the [Composite Pattern](https://refactoring.guru/design-patterns/composite) to build an in-memory representation of the schema and consequently generate a python-dictionary example of the data specified by the schema.
 
@@ -63,4 +63,4 @@ Extending the solution by adding user-defined providers is possible by creating 
 * [ ] (Possibly) Add examples for Dockerized deployment of Publishers
 * [ ] Add Code and User documentation
 * [ ] Add CICD Pipeline for deploying python package to PyPi
-* [ ] Improve Local Python Packaging (because I am quite new to that)
+* [ ] Improve Local Python Packaging
