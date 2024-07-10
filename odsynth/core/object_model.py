@@ -39,6 +39,10 @@ class Record(DataElement):
         self._field_name = value
 
     @property
+    def children(self) -> List[DataElement]:
+        return self._children
+
+    @property
     def max_count(self):
         if self._max_count == 0:
             return randint(1, DEFAULT_MAX_COUNT)
