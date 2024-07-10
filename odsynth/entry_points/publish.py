@@ -26,12 +26,9 @@ def publish_data(
     schema_spec_file: str = typer.Option(
         help="Location of schema definition for data generation"
     ),
-    num_samples: int = typer.Option(help="Number of samples to be generated"),
+    num_samples: int = typer.Option(10, help="Number of samples to be generated"),
     batch_size: int = typer.Option(
-        help="Number of examples to be generated in a batch"
-    ),
-    output_dir: str = typer.Option(
-        None, help="Location on disk where json data will be stored"
+        10, help="Number of examples to be generated in a batch"
     ),
     run_as_daemon: bool = typer.Option(
         False, "--run-as-daemon", "-d", help="Run in infinite loop"

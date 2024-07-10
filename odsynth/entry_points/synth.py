@@ -10,9 +10,9 @@ def generate_data_command(
     schema_spec_file: str = typer.Option(
         help="Location of schema definition for data generation"
     ),
-    num_samples: int = typer.Option(10, help="Number of samples to be generated"),
+    num_samples: int = typer.Option(1, help="Number of samples to be generated"),
     batch_size: int = typer.Option(
-        5, help="Size of batch when generating data in batches"
+        1, help="Size of batch when generating data in batches"
     ),
     plugins_dir: str = typer.Option(
         None, help="Location for user added data generation providers."
