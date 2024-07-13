@@ -1,6 +1,5 @@
 from .abstract_writer import AbstractWriter
-from .json_to_disc_writer import JsonToDiscWriter
-from .xml_to_disc_writer import XMLToDiscWriter
+from .disc_writer import DiscWriter
 
 
 class WriterFactory:
@@ -41,8 +40,7 @@ class WriterFactory:
     def load_writers(cls):
         """Registers the various writer types and makes them available
         for creating new writers"""
-        cls.register_writer(JsonToDiscWriter)
-        cls.register_writer(XMLToDiscWriter)
+        cls.register_writer(DiscWriter)
 
 
 def load_writers():
