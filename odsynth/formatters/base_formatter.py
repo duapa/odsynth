@@ -32,4 +32,4 @@ class BaseFormatter(AbstractFormatter):
 
     @property
     def file_extension(self):
-        raise ValueError("File storage is not supported for BaseFormatters")
+        raise ValueError("File write operations are not supported for BaseFormatters")
