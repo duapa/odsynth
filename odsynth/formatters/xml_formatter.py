@@ -30,7 +30,7 @@ class XMLFormatter(BaseFormatter):
 
         return to_xml_str(build_xml_element(field_name, data))
 
-    def format(self, data: List[Dict[str, Any]]):
+    def format_data(self, data: List[Dict[str, Any]]):
         """Transforms data from odsynth.DataGenerator to XML.
 
         Parameters:
@@ -51,8 +51,12 @@ class XMLFormatter(BaseFormatter):
         return "xml"
 
     def prepare_for_writing(self, data: List[Dict[str, Any]]) -> List[str]:
-        xml_reprs = self.format(data)
+        xml_reprs = self.format_data(data)
         output_xml = ""
         for xml in xml_reprs:
             output_xml += xml
         return [f"<{XML_DOC_ROOT}>{output_xml}</{XML_DOC_ROOT}>"]
+
+    @property
+    def file_extension(self):
+        return __class__.get_name()

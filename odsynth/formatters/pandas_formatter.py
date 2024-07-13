@@ -10,7 +10,7 @@ class PandasDataframeFormatter(BaseFormatter):
     """Takes data generated in odsynth.DataGenerator and
     transforms it to a Pandas DataFrame."""
 
-    def format(self, data: List[Dict[str, Any]]) -> pd.DataFrame:
+    def format_data(self, data: List[Dict[str, Any]]) -> pd.DataFrame:
         """Transforms data from odsynth.DataGenerator to a Pandas Dataframe.
 
         Parameters:
@@ -30,4 +30,10 @@ class PandasDataframeFormatter(BaseFormatter):
     def prepare_for_writing(self, data: List[Dict[str, Any]]) -> List[str]:
         raise DataWritePreparationException(
             "Data preparation is not supported for PandasDataFrameFormatter"
+        )
+
+    @property
+    def file_extension(self):
+        raise ValueError(
+            "File write operations are not supported for PandasDataFrameFormatters"
         )

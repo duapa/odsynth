@@ -8,7 +8,7 @@ class JsonFormatter(BaseFormatter):
     """Takes data generated in odsynth.DataGenerator and
     transforms it to JSON."""
 
-    def format(self, data: List[Dict[str, Any]]):
+    def format_data(self, data: List[Dict[str, Any]]):
         """Transforms data from odsynth.DataGenerator to JSON.
 
         Parameters:
@@ -29,4 +29,8 @@ class JsonFormatter(BaseFormatter):
         return "json"
 
     def prepare_for_writing(self, data: List[Dict[str, Any]]) -> List[str]:
-        return self.format(data=data)
+        return self.format_data(data=data)
+
+    @property
+    def file_extension(self):
+        return __class__.get_name()

@@ -24,8 +24,12 @@ class BaseFormatter(AbstractFormatter):
     def get_name(cls) -> str:
         return "default"
 
-    def format(self, data: List[Dict[str, Any]]) -> Any:
+    def format_data(self, data: List[Dict[str, Any]]) -> Any:
         return data
 
     def prepare_for_writing(self, data: List[Dict[str, Any]]) -> List[str]:
         return super().prepare_for_writing(data)
+
+    @property
+    def file_extension(self):
+        raise ValueError("File storage is not supported for BaseFormatters")

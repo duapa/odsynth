@@ -7,7 +7,7 @@ class AbstractFormatter(ABC):
     transforms it to a desired in-memory format."""
 
     @abstractmethod
-    def format(self, data: List[Dict[str, Any]]) -> Any:
+    def format_data(self, data: List[Dict[str, Any]]) -> Any:
         """Transforms data from odsynth.DataGenerator to a desired in-memory format.
 
         Parameters:
@@ -18,7 +18,7 @@ class AbstractFormatter(ABC):
         ---------
         - output (Any): Formatted data
         """
-        raise NotImplementedError("Subclasses must implement 'format' method")
+        raise NotImplementedError("Subclasses must implement 'format_data' method")
 
     @classmethod
     @abstractmethod
