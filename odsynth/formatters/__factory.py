@@ -2,6 +2,7 @@ from typing import Optional
 
 from .abstract_formatter import AbstractFormatter
 from .base_formatter import BaseFormatter
+from .delimited_text_formatter import DelimitedTextFormatter
 from .json_formatter import JsonFormatter
 from .pandas_formatter import PandasDataframeFormatter
 from .xml_formatter import XMLFormatter
@@ -48,6 +49,7 @@ class FormatterFactory:
         cls.register_formatter(JsonFormatter)
         cls.register_formatter(PandasDataframeFormatter),
         cls.register_formatter(XMLFormatter)
+        cls.register_formatter(DelimitedTextFormatter)
 
 
 def load_formatters():

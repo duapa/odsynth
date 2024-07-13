@@ -119,8 +119,9 @@ class Schema:
         format: str = None,
         formatter_args: Optional[List[str]] = [],
     ) -> Schema:
+        parsed_formatter_args = parse_args(formatter_args)
         self._formatter = FormatterFactory.get_formatter(
-            format, object_model=self._object_model, **parse_args(formatter_args)
+            format, object_model=self._object_model, **parsed_formatter_args
         )
         self._generator = DataGenerator(
             object_model=self._object_model,

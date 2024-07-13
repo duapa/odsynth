@@ -63,12 +63,12 @@ class DataGenerator:
             data_points = []
             for _ in range(self._batch_size):
                 data_points.append(self._object_model.generate_data())
-            yield self._formatter.format(data_points)
+            yield data_points
         if remainder > 0:
             data_points = []
             for _ in range(remainder):
                 data_points.append(self._object_model.generate_data())
-            yield self._formatter.format(data_points)
+            yield data_points
 
     @property
     def batch_size(self) -> int:
