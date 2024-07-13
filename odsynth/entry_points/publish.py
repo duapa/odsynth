@@ -1,24 +1,10 @@
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import typer
 
-from ..publisher import Publisher
-from ..writers import WriterFactory
+from ..schema import Schema
 
 app = typer.Typer()
-
-
-def get_writer_kwargs(data: List[str]) -> Dict[str, str]:
-    kwargs = {}
-    if not data:
-        return kwargs
-    for line in data:
-        try:
-            key, value = line.split("=")
-            kwargs.update({key.replace("-", "_"): value})
-        except ValueError:
-            typer.echo(f"Invalid key-value pair: {line}")
-    return kwargs
 
 
 @app.command()
@@ -33,9 +19,6 @@ def publish_data(
     run_as_daemon: bool = typer.Option(
         False, "--run-as-daemon", "-d", help="Run in infinite loop"
     ),
-    plugins_dir: str = typer.Option(
-        None, help="Location for user added data generation providers."
-    ),
     max_num_workers: int = typer.Option(
         2,
         help="Maximum number of threads created when writing data",
@@ -45,27 +28,27 @@ def publish_data(
         help="Size of the queue for thread pool when writing data",
     ),
     writer: str = typer.Option(
-        "json_to_disc",
+        "local_disc",
         help="Writer to use for publishing the data",
     ),
     writer_arg: Optional[List[str]] = typer.Option(
-        None, help="Keyword Arguments needed by the writer"
+        None, help="Arguments needed by the writer"
+    ),
+    formatter: Optional[str] = typer.Option(
+        "json", help="Format in which data is generated (xml, json, text, etc)"
     ),
 ):
-    writer_kwargs = get_writer_kwargs(writer_arg)
-    data_writer = WriterFactory.get_writer(writer_name=writer, **writer_kwargs)
-
-    publisher = Publisher(
-        schema_spec_file=schema_spec_file,
-        plugins_dir=plugins_dir,
+    schema = Schema(schema_file=schema_spec_file).build_publisher(
+        writer=writer,
+        writer_args=writer_arg,
         num_examples=num_samples,
         batch_size=batch_size,
-        run_as_daemon=run_as_daemon,
-        writer=data_writer,
-        max_num_workers=max_num_workers,
+        formatter=formatter,
         queue_size=queue_size,
+        max_num_workers=max_num_workers,
+        run_as_daemon=run_as_daemon,
     )
-    publisher.publish_data()
+    schema.publish_data()
 
 
 def main():

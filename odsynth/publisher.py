@@ -1,24 +1,40 @@
 import concurrent.futures
 import threading
 from queue import Queue
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from .generator import DataGenerator
-from .writers import AbstractWriter, load_writers
+from .writers import WriterFactory, load_writers
 
 load_writers()
 
 
+class WriterArgumentsException(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
+def get_writer_kwargs(data: List[str]) -> Dict[str, str]:
+    kwargs = {}
+    if not data:
+        return kwargs
+    for line in data:
+        try:
+            key, value = line.split("=")
+            kwargs.update({key.replace("-", "_"): value})
+        except ValueError:
+            raise WriterArgumentsException(f"Invalid key-value pair: {line}")
+    return kwargs
+
+
 class Publisher:
-    """Generates and persists data to desired medium."""
+    """Publishes data from a data generator to a specified medium"""
 
     def __init__(
         self,
-        schema_spec_file: str,
-        plugins_dir: str,
-        writer: AbstractWriter,
-        num_examples: int = 100,
-        batch_size: int = 10,
+        generator: DataGenerator,
+        writer_name: str,
+        writer_args: Optional[List[str]],
         queue_size: int = 10,
         max_num_workers: int = 2,
         run_as_daemon: bool = False,
@@ -29,9 +45,6 @@ class Publisher:
 
         Parameters
         -
-        schema_spec_file (str): Location of schema specification file (in yaml)
-        plugins_dir (str): Plugins directory from where user's own primitive field providers
-         can be loaded
         writer(AbstractWriter): A writer for persisting the generated data
         num_examples (int): number of records to be generated
         batch_size (int): Size of batch in which data is to be generated. If the
@@ -43,30 +56,19 @@ class Publisher:
         run_as_daemon (bool): Run the publisher in an unending loop? True == yes :)
 
         """
-        self._schema_spec_file = schema_spec_file
-        self._plugins_dir = plugins_dir
-        self._num_examples = num_examples
-        self._batch_size = batch_size
+
         self._run_as_daemon = run_as_daemon
         self._processing_queue = Queue(maxsize=queue_size)
         self._max_num_workers = max_num_workers
         self._writer_shutdown_event = threading.Event()
-        self._writer = writer
 
+        _writer_args = get_writer_kwargs(writer_args)
+        self._writer = WriterFactory.get_writer(
+            writer_name=writer_name, formatter=generator.formatter, **_writer_args
+        )
+        self._generator = generator
         if self._run_as_daemon:
-            self._generator = DataGenerator(
-                schema_spec_file=self._schema_spec_file,
-                plugins_dir=self._plugins_dir,
-                num_examples=self._batch_size,
-                batch_size=self._batch_size,
-            )
-        else:
-            self._generator = DataGenerator(
-                schema_spec_file=self._schema_spec_file,
-                plugins_dir=self._plugins_dir,
-                num_examples=self._num_examples,
-                batch_size=self._batch_size,
-            )
+            self._generator.num_examples = self._generator.batch_size
 
     def publish_data(self):
         def write_batch(batch: List[Dict[str, Any]]):
