@@ -1,0 +1,16 @@
+fields:
+  parent_firstname:
+    provider: first_name
+  parent_lastname:
+    provider: last_name
+  parent_age:
+    provider: random_int
+    provider_args:
+      min: 25
+      max: 55
+  parent_ssn:
+    provider: ssn
+  parent_about:
+    provider: text
+    provider_args:
+      max_nb_chars: 50

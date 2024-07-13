@@ -1,11 +1,11 @@
 from typing import Any, Dict, List
 from xml.etree.ElementTree import Element, tostring
 
-from ..globals import DOM_ROOT_KEY
-from .abstract_transformer import AbstractTransformer
+from ..globals import DOM_ROOT_KEY, XML_DOC_ROOT
+from .base_formatter import BaseFormatter
 
 
-class XMLTransformer(AbstractTransformer):
+class XMLFormatter(BaseFormatter):
     """Takes data generated in odsynth.DataGenerator and
     transforms it to XML."""
 
@@ -30,7 +30,7 @@ class XMLTransformer(AbstractTransformer):
 
         return to_xml_str(build_xml_element(field_name, data))
 
-    def transform(self, data: List[Dict[str, Any]]):
+    def format_data(self, data: List[Dict[str, Any]]):
         """Transforms data from odsynth.DataGenerator to XML.
 
         Parameters:
@@ -41,11 +41,22 @@ class XMLTransformer(AbstractTransformer):
         --------
         output (list[str]): Data transformed into a list of xml strings.
         """
-        xml_documents = []
+        xml_objects = []
         for data_point in data:
-            xml_documents.append(self._dict_to_xml(DOM_ROOT_KEY, data=data_point))
-        return xml_documents
+            xml_objects.append(self._dict_to_xml(DOM_ROOT_KEY, data=data_point))
+        return xml_objects
 
     @classmethod
     def get_name(cls) -> str:
         return "xml"
+
+    def prepare_for_writing(self, data: List[Dict[str, Any]]) -> List[str]:
+        xml_reprs = self.format_data(data)
+        output_xml = ""
+        for xml in xml_reprs:
+            output_xml += xml
+        return [f"<{XML_DOC_ROOT}>{output_xml}</{XML_DOC_ROOT}>"]
+
+    @property
+    def file_extension(self):
+        return __class__.get_name()

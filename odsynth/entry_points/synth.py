@@ -1,6 +1,8 @@
+from typing import List, Optional
+
 import typer
 
-from ..generator import DataGenerator
+from ..schema import Schema
 
 app = typer.Typer()
 
@@ -10,27 +12,23 @@ def generate_data_command(
     schema_spec_file: str = typer.Option(
         help="Location of schema definition for data generation"
     ),
-    num_samples: int = typer.Option(10, help="Number of samples to be generated"),
+    num_samples: int = typer.Option(1, help="Number of samples to be generated"),
     batch_size: int = typer.Option(
-        5, help="Size of batch when generating data in batches"
+        1, help="Size of batch when generating data in batches"
     ),
-    plugins_dir: str = typer.Option(
-        None, help="Location for user added data generation providers."
-    ),
-    transformer: str = typer.Option(
+    format: str = typer.Option(
         None,
-        help="Transformer used to render the generated data. Default = List of Dicts",
+        help="Format used to render the generated data. Default = List of Dicts",
     ),
+    formatter_arg: Optional[List[str]] = typer.Option(None, help="Formatter arguments"),
 ):
-    generator = DataGenerator(
-        schema_spec_file=schema_spec_file,
-        plugins_dir=plugins_dir,
+    schema = Schema(schema_file=schema_spec_file).build_generator(
         num_examples=num_samples,
-        transformer_name=transformer,
         batch_size=batch_size,
+        format=format,
+        formatter_args=formatter_arg,
     )
-
-    data = generator.get_data()
+    data = schema.get_data()
     print(data)
 
 

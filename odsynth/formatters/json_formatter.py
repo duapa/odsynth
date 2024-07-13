@@ -1,14 +1,14 @@
 import json
 from typing import Any, Dict, List
 
-from .abstract_transformer import AbstractTransformer
+from .base_formatter import BaseFormatter
 
 
-class JsonTransformer(AbstractTransformer):
+class JsonFormatter(BaseFormatter):
     """Takes data generated in odsynth.DataGenerator and
     transforms it to JSON."""
 
-    def transform(self, data: List[Dict[str, Any]]):
+    def format_data(self, data: List[Dict[str, Any]]):
         """Transforms data from odsynth.DataGenerator to JSON.
 
         Parameters:
@@ -27,3 +27,10 @@ class JsonTransformer(AbstractTransformer):
     @classmethod
     def get_name(cls) -> str:
         return "json"
+
+    def prepare_for_writing(self, data: List[Dict[str, Any]]) -> List[str]:
+        return self.format_data(data=data)
+
+    @property
+    def file_extension(self):
+        return __class__.get_name()

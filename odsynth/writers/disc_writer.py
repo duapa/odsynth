@@ -2,29 +2,33 @@ import os
 import time
 from typing import Any, Dict, List
 
+from ..formatters import AbstractFormatter
 from ..globals import DEFAULT_OUTPUT_SUBDIR
-from ..transformers import JsonTransformer
 from .abstract_writer import AbstractWriter
 
 
-class JsonToDiscWriter(AbstractWriter):
-    """Writers write generated data to JSON on disc"""
+class DiscWriter(AbstractWriter):
+    """Writers write generated data to disc"""
 
-    def __init__(self, output_dir=None):
+    def __init__(self, formatter: AbstractFormatter, output_dir=None):
         """
-        Constructor for JsonToDiscWriter
+        Constructor for DiscWriter
 
         Parameters
         -
+        formatter (AbstractFormatter): Formatter for preparing generated data for writing
         output_dir (str): Directory into which generated data is to be written
         """
         timestamp = int(time.time() * 1e6)
         if not output_dir:
-            _output_dir = f"{os.getcwd()}/{DEFAULT_OUTPUT_SUBDIR}/json/{timestamp}"
+            pwd = os.getcwd()
+            _output_dir = (
+                f"{pwd}/{DEFAULT_OUTPUT_SUBDIR}/{formatter.get_name()}/{timestamp}"
+            )
         else:
-            _output_dir = f"{output_dir}/json/{timestamp}"
+            _output_dir = f"{output_dir}/{formatter.get_name()}/{timestamp}"
         self._output_dir = _output_dir
-        self._transformer = JsonTransformer()
+        self._formatter = formatter
 
     def write_data(self, data: List[Dict[str, Any]]):
         """Writes generated data to JSON on Disc.
@@ -35,12 +39,14 @@ class JsonToDiscWriter(AbstractWriter):
         """
         os.makedirs(self._output_dir, exist_ok=True)
         timestamp = int(time.time() * 1e6)
-        filename = f"{self._output_dir}/odsynth_{timestamp}.json"
+        filename = (
+            f"{self._output_dir}/odsynth_{timestamp}.{self._formatter.get_name()}"
+        )
         with open(filename, "w") as file:
-            for item in self._transformer.transform(data):
+            for item in self._formatter.prepare_for_writing(data=data):
                 file.write(item)
                 file.write("\n")
 
     @classmethod
     def get_name(cls) -> str:
-        return "json_to_disc"
+        return "local_disc"

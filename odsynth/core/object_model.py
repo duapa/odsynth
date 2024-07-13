@@ -9,6 +9,7 @@ class DataElement(ABC):
     """An in memory representation of the schema of an item of data"""
 
     @property
+    @abstractmethod
     def field_name(self) -> str:
         """Returns field name of a record or primitive fields"""
         raise NotImplementedError("'field_name' must be implemented in a subclass")
@@ -17,6 +18,12 @@ class DataElement(ABC):
     def generate_data(self):
         """Generates data based on schema or primitive data provider"""
         raise NotImplementedError("'generate_data' must be implemented in a subclasses")
+
+    @property
+    @abstractmethod
+    def depth(self) -> int:
+        """Returns the depth of the object tree"""
+        raise NotImplementedError("Property '.depth' must be implemented in subclass")
 
 
 class Record(DataElement):
@@ -37,6 +44,10 @@ class Record(DataElement):
     @field_name.setter
     def field_name(self, value: str):
         self._field_name = value
+
+    @property
+    def children(self) -> List[DataElement]:
+        return self._children
 
     @property
     def max_count(self):
@@ -72,6 +83,15 @@ class Record(DataElement):
             return self.__generate_data_array()
         return self.__generate_data()
 
+    @property
+    def depth(self):
+        max_depth = 0
+        for child in self._children:
+            depth = child.depth
+            if depth > max_depth:
+                max_depth = depth
+        return max_depth + 1
+
 
 class Field(DataElement):
     """Generates a primitive data type (string, float, int, bool, etc)"""
@@ -105,3 +125,7 @@ class Field(DataElement):
         raise NotImplementedError(
             "Data generation of a provider must be implemented in subclass"
         )
+
+    @property
+    def depth(self):
+        return 1
