@@ -50,7 +50,7 @@ class DataGenerator:
             data_points.append(self._object_model.generate_data())
         if self._formatter is None:
             return data_points
-        return self._formatter.format(data_points)
+        return self._formatter.format_data(data_points)
 
     @property
     def object_model(self):
