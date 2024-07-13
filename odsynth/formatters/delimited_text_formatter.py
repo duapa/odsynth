@@ -49,22 +49,24 @@ class DelimitedTextFormatter(BaseFormatter):
                 strings.append(str(item))
             return strings
 
+        fields = []
+        delimiter = self._delimiter.value[0]
+        for item in self._object_model.children:
+            fields.append(item.field_name)
+        header = [delimiter.join(fields)]
+
         list_txt_str = []
         for item in data:
             values = values_to_str(list(item.values()))
             delimiter = self._delimiter.value[0]
             txt_str = delimiter.join(values)
             list_txt_str.append(txt_str)
-        return list_txt_str
+
+        output = header + list_txt_str
+        return output
 
     def prepare_for_writing(self, data: List[Dict[str, Any]]) -> List[str]:
-        fields = []
-        delimiter = self._delimiter.value[0]
-        for item in self._object_model.children:
-            fields.append(item.field_name)
-        header = [delimiter.join(fields)]
-        output = header + self.format_data(data)
-        return output
+        return self.format_data(data)
 
     @property
     def file_extension(self):
