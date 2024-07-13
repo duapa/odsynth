@@ -34,7 +34,7 @@ def publish_data(
     writer_arg: Optional[List[str]] = typer.Option(
         None, help="Arguments needed by the writer"
     ),
-    formatter: Optional[str] = typer.Option(
+    format: Optional[str] = typer.Option(
         "json", help="Format in which data is generated (xml, json, text, etc)"
     ),
 ):
@@ -43,7 +43,7 @@ def publish_data(
         writer_args=writer_arg,
         num_examples=num_samples,
         batch_size=batch_size,
-        formatter=formatter,
+        format=format,
         queue_size=queue_size,
         max_num_workers=max_num_workers,
         run_as_daemon=run_as_daemon,

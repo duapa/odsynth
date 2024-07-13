@@ -14,13 +14,13 @@ def generate_data_command(
     batch_size: int = typer.Option(
         1, help="Size of batch when generating data in batches"
     ),
-    formatter: str = typer.Option(
+    format: str = typer.Option(
         None,
-        help="Formatter used to render the generated data. Default = List of Dicts",
+        help="Format used to render the generated data. Default = List of Dicts",
     ),
 ):
     schema = Schema(schema_file=schema_spec_file).build_generator(
-        num_examples=num_samples, batch_size=batch_size, formatter=formatter
+        num_examples=num_samples, batch_size=batch_size, format=format
     )
     data = schema.get_data()
     print(data)

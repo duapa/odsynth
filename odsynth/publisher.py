@@ -1,30 +1,15 @@
 import concurrent.futures
 import threading
 from queue import Queue
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from .generator import DataGenerator
-from .writers import WriterFactory, load_writers
-
-load_writers()
+from .writers import AbstractWriter
 
 
 class WriterArgumentsException(Exception):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
-
-
-def get_writer_kwargs(data: List[str]) -> Dict[str, str]:
-    kwargs = {}
-    if not data:
-        return kwargs
-    for line in data:
-        try:
-            key, value = line.split("=")
-            kwargs.update({key.replace("-", "_"): value})
-        except ValueError:
-            raise WriterArgumentsException(f"Invalid key-value pair: {line}")
-    return kwargs
 
 
 class Publisher:
@@ -33,8 +18,7 @@ class Publisher:
     def __init__(
         self,
         generator: DataGenerator,
-        writer_name: str,
-        writer_args: Optional[List[str]],
+        writer: AbstractWriter,
         queue_size: int = 10,
         max_num_workers: int = 2,
         run_as_daemon: bool = False,
@@ -62,10 +46,7 @@ class Publisher:
         self._max_num_workers = max_num_workers
         self._writer_shutdown_event = threading.Event()
 
-        _writer_args = get_writer_kwargs(writer_args)
-        self._writer = WriterFactory.get_writer(
-            writer_name=writer_name, formatter=generator.formatter, **_writer_args
-        )
+        self._writer = writer
         self._generator = generator
         if self._run_as_daemon:
             self._generator.num_examples = self._generator.batch_size
