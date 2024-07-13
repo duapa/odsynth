@@ -2,14 +2,15 @@ from typing import Any, Dict, List
 
 import pandas as pd
 
-from .abstract_transformer import AbstractTransformer
+from .base_formatter import BaseFormatter
+from .exceptions import DataWritePreparationException
 
 
-class PandasDataframeTransformer(AbstractTransformer):
+class PandasDataframeFormatter(BaseFormatter):
     """Takes data generated in odsynth.DataGenerator and
     transforms it to a Pandas DataFrame."""
 
-    def transform(self, data: List[Dict[str, Any]]) -> pd.DataFrame:
+    def format(self, data: List[Dict[str, Any]]) -> pd.DataFrame:
         """Transforms data from odsynth.DataGenerator to a Pandas Dataframe.
 
         Parameters:
@@ -25,3 +26,8 @@ class PandasDataframeTransformer(AbstractTransformer):
     @classmethod
     def get_name(cls) -> str:
         return "pandas"
+
+    def prepare_for_writing(self, data: List[Dict[str, Any]]) -> List[str]:
+        raise DataWritePreparationException(
+            "Data preparation is not supported for PandasDataFrameFormatter"
+        )
