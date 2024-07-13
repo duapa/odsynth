@@ -37,6 +37,7 @@ def publish_data(
     format: Optional[str] = typer.Option(
         "json", help="Format in which data is generated (xml, json, text, etc)"
     ),
+    formatter_arg: Optional[List[str]] = typer.Option(None, help="Formatter arguments"),
 ):
     schema = Schema(schema_file=schema_spec_file).build_publisher(
         writer=writer,
@@ -44,6 +45,7 @@ def publish_data(
         num_examples=num_samples,
         batch_size=batch_size,
         format=format,
+        formatter_args=formatter_arg,
         queue_size=queue_size,
         max_num_workers=max_num_workers,
         run_as_daemon=run_as_daemon,

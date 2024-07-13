@@ -17,7 +17,6 @@ from .providers import ProviderFactory, load_providers
 from .publisher import Publisher
 from .utils import load_yaml
 from .writers import WriterFactory, load_writers
-from .writers.exceptions import WriterArgumentsException
 
 load_providers()
 load_formatters()
@@ -25,6 +24,11 @@ load_writers()
 
 
 class SchemaValidationException(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
+class ArgumentsParseException(Exception):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
@@ -37,16 +41,16 @@ def convert_max_str_int(max_str: str) -> int:
         return 0
 
 
-def get_writer_args(data: List[str]) -> Dict[str, str]:
+def parse_args(data: List[str]) -> Dict[str, str]:
     kwargs = {}
-    if not data:
+    if not data or data == []:
         return kwargs
     for line in data:
         try:
             key, value = line.split("=")
             kwargs.update({key.replace("-", "_"): value})
         except ValueError:
-            raise WriterArgumentsException(f"Invalid key-value pair: {line}")
+            raise ArgumentsParseException(f"Invalid key-value pair: {line}")
     return kwargs
 
 
@@ -109,10 +113,14 @@ class Schema:
         return __class__._build_object_model(DOM_ROOT_KEY, self._schema)
 
     def build_generator(
-        self, num_examples: int = 10, batch_size: int = 10, format: str = None
+        self,
+        num_examples: int = 10,
+        batch_size: int = 10,
+        format: str = None,
+        formatter_args: Optional[List[str]] = [],
     ) -> Schema:
         self._formatter = FormatterFactory.get_formatter(
-            format, object_model=self._object_model
+            format, object_model=self._object_model, **parse_args(formatter_args)
         )
         self._generator = DataGenerator(
             object_model=self._object_model,
@@ -130,6 +138,7 @@ class Schema:
         num_examples: int = 10,
         batch_size: int = 10,
         format: str = None,
+        formatter_args: List[str] = [],
         queue_size: int = 10,
         max_num_workers: int = 2,
         run_as_daemon: bool = False,
@@ -138,9 +147,10 @@ class Schema:
             num_examples=num_examples,
             batch_size=batch_size,
             format=format,
+            formatter_args=formatter_args,
         )
         output_writer = WriterFactory.get_writer(
-            writer_name=writer, formatter=self.formatter, **get_writer_args(writer_args)
+            writer_name=writer, formatter=self.formatter, **parse_args(writer_args)
         )
         self._publisher = Publisher(
             generator=self._generator,

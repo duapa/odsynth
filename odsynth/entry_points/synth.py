@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 import typer
 
 from ..schema import Schema
@@ -18,9 +20,13 @@ def generate_data_command(
         None,
         help="Format used to render the generated data. Default = List of Dicts",
     ),
+    formatter_arg: Optional[List[str]] = typer.Option(None, help="Formatter arguments"),
 ):
     schema = Schema(schema_file=schema_spec_file).build_generator(
-        num_examples=num_samples, batch_size=batch_size, format=format
+        num_examples=num_samples,
+        batch_size=batch_size,
+        format=format,
+        formatter_args=formatter_arg,
     )
     data = schema.get_data()
     print(data)
