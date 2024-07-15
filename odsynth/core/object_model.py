@@ -1,5 +1,5 @@
+import secrets
 from abc import ABC, abstractmethod
-from random import randint
 from typing import Any, List
 
 DEFAULT_MAX_COUNT = 5
@@ -52,8 +52,8 @@ class Record(DataElement):
     @property
     def max_count(self):
         if self._max_count == 0:
-            return randint(1, DEFAULT_MAX_COUNT)
-        return randint(1, self._max_count)
+            return secrets.randbelow(DEFAULT_MAX_COUNT + 1)
+        return secrets.randbelow(self._max_count + 1)
 
     def add(self, element: DataElement):
         """Add a data element (Record or Field) to the list of fields of a

@@ -63,20 +63,19 @@ class Schema:
         self._publisher = None
 
     def validate(self):
+        subfield_err_msg = (
+            "A Subfield must either be a Record type or a Primitive Field type"
+        )
         if (
             SCHEMA_PROVIDER_KEY not in self._schema
             and SCHEMA_SUB_FIELDS_KEY not in self._schema
         ):
-            raise SchemaValidationException(
-                "Subfields must either be a Compound field or a Primitive Fields"
-            )
+            raise SchemaValidationException(subfield_err_msg)
         if (
             SCHEMA_PROVIDER_KEY in self._schema
             and SCHEMA_SUB_FIELDS_KEY in self._schema
         ):
-            raise SchemaValidationException(
-                "Subfields must either be a Compound field or a Primitive Fields"
-            )
+            raise SchemaValidationException(subfield_err_msg)
         return True
 
     @classmethod

@@ -34,6 +34,6 @@ class PandasDataframeFormatter(BaseFormatter):
 
     @property
     def file_extension(self):
-        raise ValueError(
+        raise DataWritePreparationException(
             "File write operations are not supported for PandasDataFrameFormatters"
         )
