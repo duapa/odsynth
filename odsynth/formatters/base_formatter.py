@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 
 from ..core import DataElement
 from .abstract_formatter import AbstractFormatter
-from .exceptions import ObjectModelValidationException
+from .exceptions import DataWritePreparationException, ObjectModelValidationException
 
 
 class BaseFormatter(AbstractFormatter):
@@ -28,8 +28,12 @@ class BaseFormatter(AbstractFormatter):
         return data
 
     def prepare_for_writing(self, data: List[Dict[str, Any]]) -> List[str]:
-        return super().prepare_for_writing(data)
+        raise DataWritePreparationException(
+            "File write operations are not supported for BaseFormatters"
+        )
 
     @property
     def file_extension(self):
-        raise ValueError("File write operations are not supported for BaseFormatters")
+        raise DataWritePreparationException(
+            "File write operations are not supported for BaseFormatters"
+        )

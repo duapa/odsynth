@@ -13,8 +13,8 @@ def get_delimiter(enum_str):
     try:
         return DelimitedTextFormats[enum_str]
     except KeyError:
-        raise ValueError(
-            f"{enum_str} is not a valid member of {DelimitedTextFormats.__name__}"
+        raise DelimitedTextTypeException(
+            f"{enum_str} is not supported as a type of delimited text."
         )
 
 
@@ -22,6 +22,11 @@ class DelimitedTextFormats(Enum):
     comma = (",", "csv")
     pipe = ("|", "txt")
     tab = ("\t", "tsv")
+
+
+class DelimitedTextTypeException(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
 
 
 class DelimitedTextFormatter(BaseFormatter):
