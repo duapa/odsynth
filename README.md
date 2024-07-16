@@ -1,66 +1,107 @@
-# Yaml Schema + Faker == ODSynth
+# ODSynth
 
-This project produces a python application that can be configured to generate "any" kind of fake data, given a schema. The solution relies on the [Composite Pattern](https://refactoring.guru/design-patterns/composite) to build an in-memory representation of the schema and consequently generate a python-dictionary example of the data specified by the schema.
+ODSynth generates samples of synthetic data for you, based on the expected schema of your data. This project may be used for generating data for:
+* Seeding your ETL applications
+* Benchmarking of ETL applications
+* Producing data in various formats (json, delimited text, xml, etc)
 
-This project may be used for generating data for exploratory cases at the beginning of ETL applications, benchmarking, fun projects etc.
-The following providers, some based on `faker's` data generators have been implemented
-* [random_int](./odsynth/providers/random_int.py)
-* [first_name](./odsynth/providers/simple_text.py)
-* [last_name](./odsynth/providers/simple_text.py)
+With the plugin system, developers can use their 'providers' locally in their own applications.
 
+## How it works
+1. Specify a schema. [See an example here](./sample_schema/flat_schema.yaml). The providers specify the type of data to be generated. (For example `first_name`, `last_name` etc.)
+1. Use the schema to **generate data** in memory or **publish data** to disc or other medium
 
-It is possible for developers to implement their own _data providers_ for their own custom cases. Users can then specify these providers in their schemas.
+## Installation
+A proper python package for this application is not yet available, so users must download and install this package locally
 
-## Dependencies
-* See [setup_config.toml](./setup_config.toml)
+```sh
+git clone https://github.com/kbaafi/data-synthesizer.git
+cd data-synthesizer
+# Optional
+# python -m venv venv
+pip install -e .
+```
+## Basic Usage
+### Use 'synth' to generate json data
+`synth --schema-spec-file=../schema.yaml --format=json --num-samples=3`
+### Use 'synth' to generate csv data
+`synth --schema-spec-file=../flat_schema.yaml --format=txt --num-samples=3 --formatter-arg delimiter=comma`
 
-## Usage
-Users can specify a plugins directory where additional Primitive data generators are stored. Run `main.py --help` for instructions.
+Delimiter may be one of 'comma', 'tab' or 'pipe'
 
-### Example
-`python odsynth/entry_points/demo.py --schema-spec=./sample_schema/schema_plural.yaml --plugins-dir=./sample_user_plugins --num-samples=3`
+### Use 'publish' to load synthetic data to local disc in XML format
+Publish 100 samples of schema specified in `flat_schema.yaml`, 10 examples per batch.
 
-This example uses the schema at [./sample_schema/schema.yaml](./sample_schema/schema.yaml) which simulates the scenario of a parent having multiple children to produce an output similar what is shown below:
+`publish --schema-spec-file=../flat_schema.yaml --format=xml --writer=local_disc --writer-arg output_dir=../odsynth_out --num-samples=100 --batch-size=10`
+
+> For more on the data generator and the data publisher, see the help pages for synth and publish
+`publish --help` or `synth --help`
+
+## Schemas and Providers
+An example schema is shown below. This schema simulates the scenario of a parent responsible for up to 5 children. Providers are responsible for generating the primitive fields that comprise the record. [An example of a provider that generates a random integer can be found here](./odsynth/providers/random_int.py)
+```yaml
+fields:
+  parent_firstname:
+    provider: first_name
+  parent_lastname:
+    provider: last_name
+  children:
+    fields:
+      firstname:
+        provider: first_name
+      lastname:
+        provider: last_name
+    max_count: 5
+    is_array: true
+  parent_age:
+    provider: random_int
+    provider_args:
+      min: 25
+      max: 55
+  parent_ssn:
+    provider: ssn
+```
+This schema is expected generated a data point that looks like this:
 
 ```json
 {
-    "firstname": "Bruce",
-    "lastname": "Henderson",
+    "parent_first_name": "Christopher", "parent_lastname": "Villegas",
     "children": [
-        {"firstname": "George", "lastname": "Clayton"},
-        {"firstname": "Brianna", "lastname": "Mosley"},
+        {"firstname": "Jason", "lastname": "Rogers"},
+        {"firstname": "Andrea", "lastname": "Young"},
+        {"firstname": "Michelle", "lastname": "Kaiser"}
     ],
-    "age": 37,
-    "ssn": "604-35-3570"
+    "parent_age": 43,
+    "parent_ssn": "269-11-8507"
 }
 ```
-**Note:** The specification of the schema and user plugin folders is not restricted to relative paths.
 
-## Data Transformers
-(Experimental) In the generation of the data, the user can specify a transformer which transforms the data which is inherently a list of dictionary objects to any other form specified by the user. Currently the following transformers are available:
-* [JsonTransformer](./odsynth/transformers/json_transformer.py)
-* [PandasDataframeTransformer](./odsynth/transformers/pandas_transformer.py)
+Currently ODSynth implements the following Providers based on Faker
+* First Name
+* Last Name
+* Text
+* Random Integer
+* Social Security Number
 
-# Extensibility
-Extending the solution by adding user-defined providers is possible by creating your own plugins in a 'plugin folder' and specifying the plugin folder when calling the application. An example provider which uses `faker`'s `ssn` provider to generate fictitious American Social Security Numbers is available at [./sample_user_plugins](./sample_user_plugins/ssn.py)
+We hope to be able to develop more Providers in the future.
+## Formatters
+Generated data can be formatted into the following formats for use in memory or storage on disc:
+* Json
+* XML
+* Delimited Text (csv, tsv, pipe delimited)
+* Pandas
 
-# Development Roadmap
-* [ ] Add a logger
-* [ ] Improve DOM Validation
-* [ ] Data Transformer for Spark
-* [ ] Add support for optionals
-* [x] Build Data Transformer for Pandas
-* [x] Build Data Transformer for XML
-* [x] Build Data Writer for XML
-* [x] Build Data Transformer for JSON
-* [x] Build Data Writer for JSON
-* [ ] Build Data Writers for:
-    * [ ] S3
-    * [ ] Kafka
-    * [ ] (Possibly) to REST APIs
-    * [ ] (Possibly) for Metrics Systems like Prometheus
-* [ ] Implement a plugin system for users to add their own code(Providers, Writers and Transformers) in their own local system
-* [ ] (Possibly) Add examples for Dockerized deployment of Publishers
-* [ ] Add Code and User documentation
-* [ ] Add CICD Pipeline for deploying python package to PyPi
-* [ ] Improve Local Python Packaging
+## Writers
+Writers work with the publishing system to write generated data to a specified medium. Currently the **local_dics** writer has been implemented.
+
+## The Provider Plugin System and the ODSYNTH_HOME
+It is possible for developers to plugin in their own providers, formatters and writers to the Data Synthesis system by loading the user added components from the **ODSYNTH_HOME** directory.  The ODSYNTH_HOME is  specified by setting the environment variable `ODSYNTH_HOME`
+
+```sh
+export ODSYNTH_HOME=./sample_home_folder
+```
+
+![](./docs/assets/sample_home_folder.png)
+
+
+The plugins system will load all providers, formatters and writers from ./sample_home_folder and in this case the **ssn.py** provider plugin will be included as a provider for data synthesis.
