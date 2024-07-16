@@ -105,3 +105,25 @@ export ODSYNTH_HOME=./sample_home_folder
 
 
 The plugins system will load all providers, formatters and writers from ./sample_home_folder and in this case the **ssn.py** provider plugin will be included as a provider for data synthesis.
+
+# Development Roadmap
+* [x] Build Data Formatter for Pandas
+* [x] Build Data Formatter for XML
+* [x] Build Data Writer for XML
+* [x] Build Data Formatter for JSON
+* [x] Build Data Writer for JSON
+* [x] Build Formatter for Delimited Text
+* [ ] Add a logger (Under consideration)
+* [ ] Add some form of support for Py Faker's Locales
+* [x] Improve DOM Validation (Ongoing)
+* [ ] Data Transformer for Spark
+* [ ] Add support for optional fields
+* [ ] Build Data Writers for:
+    * [ ] S3
+    * [ ] Kafka
+    * [ ] (Possibly) to REST APIs
+* [ ] Implement a plugin system for users to add their own code(Providers, Writers and Transformers) in their own local system
+* [ ] (Possibly) Add examples for Dockerized deployment of Publishers
+* [ ] Add Code and User documentation
+* [ ] Add CICD Pipeline for deploying python package to PyPi
+* [ ] Improve Local Python Packaging
