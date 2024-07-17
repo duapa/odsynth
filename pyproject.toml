@@ -22,7 +22,7 @@ readme = "README.md"
 license = {file = "LICENSE"}
 keywords = ["data", "data synthesis", "faker", "ETL", "test data"]
 classifiers = [
-  "Development Status :: Alpha",
+  "Development Status :: 2 - Pre-Alpha",
   "Programming Language :: Python"
 ]
 
