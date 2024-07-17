@@ -33,10 +33,10 @@ class Publisher:
         num_examples (int): number of records to be generated
         batch_size (int): Size of batch in which data is to be generated. If the
          batch_size >= num_examples, only one batch will be created.
-        queue_size (int): Data batches are written using worker threads. Queue Size dictates
-         the size of the queue for worker threads which write the data
-        max_num_workers (int): Data batches are written using worker threads. max_num_workers
-         specify the maximum number of threads to use when consuming the thread queue.
+        queue_size (int): Data batches are written using worker threads. Queue Size
+         dictates the size of the queue for worker threads which write the data
+        max_num_workers (int): The maximum number of worker threads to use when
+         publishing data to a medium.
         run_as_daemon (bool): Run the publisher in an unending loop? True == yes :)
 
         """
