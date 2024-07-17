@@ -31,8 +31,10 @@ Homepage = "https://github.com/duapa/odsynth"
 Documentation = "https://github.com/duapa/odsynth/README.md"
 Repository = "https://github.com/duapa/odsynth.git"
 
-[tool.setuptools]
-packages = ["odsynth"]
+[tool.setuptools.packages.find]
+where = ["odsynth"]
+include = ["odsynth*"]
+namespaces = false
 
 [tool.black]
 line-length = 88
