@@ -16,7 +16,8 @@ class DiscWriter(AbstractWriter):
 
         Parameters
         -
-        formatter (AbstractFormatter): Formatter for preparing generated data for writing
+        formatter (AbstractFormatter): Formatter for preparing generated data
+        before writing to a medium
         output_dir (str): Directory into which generated data is to be written
         """
         timestamp = int(time.time() * 1e6)

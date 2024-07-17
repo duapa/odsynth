@@ -32,11 +32,13 @@ class DataGenerator:
 
         Parameters
         -
-        object_model (odsynth.core.Record): Object model for which data is to be generated
+        object_model (odsynth.core.Record):
+         Object model for which data is to be generated
         num_examples (int): Number of examples to be generated
         batch_size (int): Size of batch in which data is to be generated. If the
          batch_size >= num_examples, only one batch will be created.
-        formatter (AbstractFormatter): Formatter to be used to render the data after generation
+        formatter (AbstractFormatter): Formatter to be used to render the
+         data after generation
         """
         self._num_examples = num_examples
         self._batch_size = batch_size
@@ -57,7 +59,8 @@ class DataGenerator:
         return self._object_model
 
     def yield_data(self):
-        """Yield batches of data until the specified number of examples have all been generated."""
+        """Yield batches of data until the specified number of examples
+        have all been generated."""
         num_batches, remainder = divmod(self._num_examples, self._batch_size)
         for _ in range(num_batches):
             data_points = []
