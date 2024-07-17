@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "odsynth"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
   "faker",
   "typer",
@@ -32,8 +32,8 @@ Documentation = "https://github.com/duapa/odsynth/README.md"
 Repository = "https://github.com/duapa/odsynth.git"
 
 [tool.setuptools.packages.find]
-where = ["odsynth"]
-include = ["odsynth*"]
+where = ["."]
+include = ["odsynth*", "odsynth.*"]
 namespaces = false
 
 [tool.black]
