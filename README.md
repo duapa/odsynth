@@ -16,20 +16,12 @@ With the plugin system, developers can use their 'providers' locally in their ow
 
 
 ## Installation
-A proper python package for this application is not yet available, so users must clone the repo and install the Python package locally.
-
-```sh
-git clone https://github.com/kbaafi/data-synthesizer.git
-cd data-synthesizer
-# Optional
-# python -m venv venv
-pip install -e .
-```
+`pip install odsynth`
 ## Basic Usage
 ### Use 'synth' to generate json data
-`synth --schema-spec-file=../schema.yaml --format=json --num-samples=3`
+`synth --schema-spec-file=./sample_schema/schema.yaml --format=json --num-samples=3`
 ### Use 'synth' to generate csv data
-`synth --schema-spec-file=../flat_schema.yaml --format=txt --num-samples=3 --formatter-arg delimiter=comma`
+`synth --schema-spec-file=./sample_schema/flat_schema.yaml --format=txt --num-samples=3 --formatter-arg delimiter=comma`
 
 Delimiter may be one of 'comma', 'tab' or 'pipe'
 
@@ -61,7 +53,7 @@ def generate_data():
 ### Use 'publish' to load synthetic data to local disc in XML format
 Publish 100 samples of schema specified in `flat_schema.yaml`, 10 examples per batch.
 
-`publish --schema-spec-file=../flat_schema.yaml --format=xml --writer=local_disc --writer-arg output_dir=../odsynth_out --num-samples=100 --batch-size=10`
+`publish --schema-spec-file=./sample_schema/flat_schema.yaml--format=xml --writer=local_disc --writer-arg output_dir=../odsynth_out --num-samples=100 --batch-size=10`
 
 > For more on the data generator and the data publisher, see the help pages for synth and publish
 `publish --help` or `synth --help`
@@ -105,7 +97,7 @@ This schema is expected generated a data point that looks like this:
 }
 ```
 
-Currently ODSynth implements the following Providers from [Faker](https://github.com/joke2k/faker)
+Currently ODSynth implements the following Providers based on [Faker's Providers](https://github.com/joke2k/faker)
 * [First Name](./odsynth/providers/simple_text.py)
 * [Last Name](./odsynth/providers/simple_text.py)
 * [Text](./odsynth/providers/simple_text.py)
@@ -139,15 +131,8 @@ An ODSYNTH Home folder is expected to have the following subfolders the various 
 The plugins system will load all providers, formatters and writers from the HOME folder.
 
 # Development Roadmap
-* [x] Build Data Formatter for Pandas
-* [x] Build Data Formatter for XML
-* [x] Build Data Writer for XML
-* [x] Build Data Formatter for JSON
-* [x] Build Data Writer for JSON
-* [x] Build Formatter for Delimited Text
 * [ ] Add a logger (Under consideration)
 * [ ] Add some form of support for Py Faker's Locales
-* [x] Improve DOM Validation (Ongoing)
 * [ ] Data Transformer for Spark
 * [ ] Add support for optional fields
 * [ ] Build Data Writers for:
