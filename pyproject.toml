@@ -28,8 +28,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/duapa/odsynth"
-Documentation = "https://github.com/duapa/odsynth/README.md"
+Homepage = "https://odsynth.readthedocs.io/"
+Documentation = "https://odsynth.readthedocs.io/"
 Repository = "https://github.com/duapa/odsynth.git"
 
 [tool.setuptools.packages.find]

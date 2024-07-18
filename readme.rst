@@ -6,6 +6,8 @@ ODSynth generates samples of synthetic data, based on the expected schema of you
 
 With the plugin system, developers can use their own providers, formatters and writers locally in their own applications.
 
+`Read the full documentation here <https://odsynth.readthedocs.io/>`_ 
+
 
 Installation
 -------------
@@ -114,3 +116,4 @@ Credits
 
 .. _Faker: https://github.com/joke2k/faker
 .. _LICENSE: https://github.com/duapa/odsynth/blob/main/LICENSE
+.. _documentation: https://odsynth.readthedocs.io/
