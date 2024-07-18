@@ -101,3 +101,16 @@ The following output is expected: ::
         "parent_ssn": "269-11-8507"
     }
 
+License
+-------
+
+ODSynth is released under the MIT License. See `LICENSE`_ for details.
+
+Credits
+-------
+
+-  `Faker`_
+
+
+.. _Faker: https://github.com/joke2k/faker
+.. _LICENSE: https://github.com/duapa/odsynth/blob/main/LICENSE
