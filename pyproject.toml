@@ -19,7 +19,7 @@ maintainers = [
   {name = "Kofi Baafi", email = "kbaafi@gmail.com"}
 ]
 description = ""
-readme = "README.md"
+readme = "readme.rst"
 license = {file = "LICENSE"}
 keywords = ["data", "data synthesis", "faker", "ETL", "test data"]
 classifiers = [

@@ -5,3 +5,4 @@ dist
 *.egg-info
 odsynth__output
 .tox
+docs/_build
