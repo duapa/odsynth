@@ -60,7 +60,7 @@ Use 'publish' to load synthetic data to local disc in XML format
 
 Publish 100 samples of schema specified in ``flat_schema.yaml``, 10 examples per batch.
 
-``publish --schema-spec-file=../flat_schema.yaml --format=xml --writer=local_disc --writer-arg output_dir=../odsynth_out --num-samples=100 --batch-size=10``
+``publish --schema-spec-file=./sample_schema/flat_schema.yaml --format=xml --writer=local_disc --writer-arg output_dir=../odsynth_out --num-samples=100 --batch-size=10``
 
 For more on the data generator and the data publisher, see the help pages for synth and publish
 ``publish --help`` or ``synth --help``
@@ -74,10 +74,10 @@ For the following schema: ::
             provider: last_name
         children:
             fields:
-            firstname:
-                provider: first_name
-            lastname:
-                provider: last_name
+                firstname:
+                    provider: first_name
+                lastname:
+                    provider: last_name
             max_count: 5
             is_array: true
         parent_age:
