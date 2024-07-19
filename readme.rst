@@ -83,8 +83,8 @@ For the following schema: ::
         parent_age:
             provider: random_int
             provider_args:
-            min: 25
-            max: 55
+                min: 25
+                max: 55
         parent_ssn:
             provider: ssn
 
