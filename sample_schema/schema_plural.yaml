@@ -1,20 +1,20 @@
 fields:
   parent_firstname:
-    provider: first_name
+    provider: faker.first_name
   parent_lastname:
-    provider: last_name
+    provider: faker.last_name
   children:
     fields:
       firstname:
-        provider: first_name
+        provider: faker.first_name
       lastname:
-        provider: last_name
+        provider: faker.last_name
     max_count: 20
     is_array: true
   parent_age:
-    provider: random_int
+    provider: faker.random_int
     provider_args:
       min: 25
       max: 55
   parent_ssn:
-    provider: ssn
+    provider: faker.ssn

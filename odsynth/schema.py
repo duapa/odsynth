@@ -88,7 +88,7 @@ class Schema:
                 else {}
             )
             provider = ProviderFactory.get_provider(
-                provider_name, kwargs=provider_kwargs
+                provider_name=provider_name, **provider_kwargs
             )
             provider.field_name = field_name
             return provider

@@ -39,5 +39,3 @@ jobs:
 
       - name: Run Flake8 with tox
         run: tox
-
-  

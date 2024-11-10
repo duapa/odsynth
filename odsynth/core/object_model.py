@@ -96,7 +96,7 @@ class Record(DataElement):
 class Field(DataElement):
     """Generates a primitive data type (string, float, int, bool, etc)"""
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
         self._field_name = None
         self._kwargs = kwargs
 

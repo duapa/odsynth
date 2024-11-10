@@ -1,16 +1,16 @@
 fields:
   parent_firstname:
-    provider: first_name
+    provider: faker.first_name_male
   parent_lastname:
-    provider: last_name
+    provider: faker.last_name
   parent_age:
-    provider: random_int
+    provider: faker.random_int
     provider_args:
       min: 25
       max: 55
   parent_ssn:
-    provider: ssn
+    provider: faker.ssn
   parent_about:
-    provider: text
+    provider: faker.text
     provider_args:
       max_nb_chars: 50
