@@ -1,12 +1,11 @@
 ODSynth generates samples of synthetic data, based on the expected schema of your data. This project may be used for generating data for:
 
-- Seeding your ETL applications
-- Benchmarking of ETL applications
+- Seeding ETL applications
 - Producing data in various formats (json, delimited text, xml, etc) on disc
 
 With the plugin system, developers can use their own providers, formatters and writers locally in their own applications.
 
-`Read the full documentation here <https://odsynth.readthedocs.io/>`_ 
+`Read the full documentation here <https://odsynth.readthedocs.io/>`_
 
 
 Installation
@@ -29,7 +28,7 @@ Using synth to generate csv data
 The delimiter may be one of 'comma', 'tab' or 'pipe'
 
 Using ODSynth in your own code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -69,26 +68,26 @@ For the following schema: ::
 
     fields:
         parent_firstname:
-            provider: first_name
+            provider: faker.first_name
         parent_lastname:
-            provider: last_name
+            provider: faker.last_name
         children:
             fields:
                 firstname:
-                    provider: first_name
+                    provider: faker.first_name
                 lastname:
-                    provider: last_name
+                    provider: faker.last_name
             max_count: 5
             is_array: true
         parent_age:
-            provider: random_int
+            provider: faker.random_int
             provider_args:
                 min: 25
                 max: 55
         parent_ssn:
-            provider: ssn
+            provider: faker.ssn
 
-
+Beyond the use of Faker's providers you can create your own providers for the fields
 
 The following output is expected: ::
 

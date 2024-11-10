@@ -1,9 +1,7 @@
 from ..core import Field
 from ..globals import get_providers_home
 from ..plugins_loader import load_plugins
-from .random_int import RandomInt
-from .simple_text import FirstName, LastName, Text
-from .ssn import SSN
+from .faker import FakerField
 
 
 class ProviderFactory:
@@ -38,6 +36,11 @@ class ProviderFactory:
         if provider_name in cls._providers:
             provider = cls._providers[provider_name](**class_kwargs)
             return provider
+        elif provider_name.startswith("faker"):
+            # TODO: Validate faker's provider name
+            faker_type = provider_name.split(".")[1]
+            provider = FakerField(faker_type=faker_type, **class_kwargs)
+            return provider
         raise ValueError(
             f"Specified primitive field provider {provider_name} is not supported"
         )
@@ -46,11 +49,7 @@ class ProviderFactory:
     def load_providers(cls, plugins_dir: str = None):
         """Registers the various provider types and makes them available
         for synthesizing data"""
-        cls.register_provider(FirstName)
-        cls.register_provider(LastName)
-        cls.register_provider(RandomInt)
-        cls.register_provider(Text)
-        cls.register_provider(SSN)
+        cls.register_provider(FakerField)
 
         if plugins_dir:
             load_plugins(plugin_folder_name=plugins_dir)

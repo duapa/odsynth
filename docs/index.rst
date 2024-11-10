@@ -16,4 +16,3 @@ Welcome to ODSynth's documentation
    formatters
    writers
    plugins
-
